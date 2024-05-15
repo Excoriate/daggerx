@@ -1,0 +1,33 @@
+---
+version: '3'
+env:
+    ENV: '{{.ENV}}'
+vars:
+
+dotenv: ['.env.{{.ENV}}.aws', '.env.{{.ENV}}.terraform', '.env.{{.ENV}}.terragrunt']
+
+includes:
+    precommit:
+        taskfile: ./taskfiles/taskfile.precommit.yml
+    tf:
+        taskfile: ./taskfiles/Taskfile.terraform.yml
+    golang:
+        taskfile: ./taskfiles/Taskfile.go.yml
+tasks:
+    pc-init:
+        desc: Initialize and install required hooks
+        cmds:
+            - task: precommit:hooks-init
+    pc-run:
+        desc: Run all the hooks described in the .pre-commit-config.yaml file
+        cmds:
+            - task: precommit:hooks-run
+    go-ci:
+        desc: Execute all the go CI tasks in the pkg/root module.
+        dir: cli
+        cmds:
+            - task: golang:go-tidy
+            - task: golang:go-fmt
+            - task: golang:go-vet
+            - task: golang:go-lint
+            - task: golang:go-test
