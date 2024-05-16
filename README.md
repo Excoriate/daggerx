@@ -8,7 +8,9 @@
 
 ## Why 🤔
 
-This library is a set of reusable functions that can be used when developing [Dagger](https://www.dagger.io/) modules or functions using [Go](https://golang.org/). 
+This library is a set of reusable functions that can be used when developing [Dagger](https://www.dagger.io/) modules or functions using [Go](https://golang.org/).
+
+
 ## Installation 🛠️
 
 Install it using [Go get](https://golang.org/cmd/go/#hdr-Add_dependencies_to_current_module_and_install_them):

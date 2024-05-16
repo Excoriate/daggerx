@@ -2,13 +2,6 @@
 run:
     tests: false
     timeout: 240s
-    skip-dirs-use-default: true
-    skip-dirs:
-        - ^vendor$
-        - ^go/pkg/mod/*
-        - ../../../../go/pkg/mod/*
-        - ../../../../.gobrew/*
-        - .*_test\.go$
     skip-files:
         - .*\.pb\.go
         - .*_generated\.go
