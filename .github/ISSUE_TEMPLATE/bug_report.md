@@ -18,17 +18,12 @@ Please select the type of bug you are reporting:
 
 ## 🔬 Steps to Reproduce
 Detail out the steps to reproduce the bug.
-Example:
-1. Run the `terradagger tf` command.
-2. Define the resource parameters.
-3. Observe the crash/error message.
 
 ## 🔑 Expected Behavior
 Explain what you anticipated happening.
 
 ## 🌚 Actual Behavior
 Describe what actually occurred given the steps.
-Example: "go-terradagger crashed and an error message was displayed."
 
 ## 🧰 Possible Solution
 Impart any insight on a potential bug fix, if possible.

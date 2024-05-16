@@ -29,3 +29,8 @@ tasks:
             - task: golang:go-vet
             - task: golang:go-lint
             - task: golang:go-test
+
+    go-publish:
+        desc: Publish the go module to the registry
+        cmds:
+            - ./scripts/publish-go-module.sh

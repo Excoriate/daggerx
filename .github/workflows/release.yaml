@@ -24,6 +24,8 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3
+              with:
+                  fetch-depth: 0
             - uses: googleapis/release-please-action@v4
               id: release
               with:
@@ -38,6 +40,8 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
             - name: Set up Go
               uses: actions/setup-go@v4
               with:

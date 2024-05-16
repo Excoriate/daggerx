@@ -9,9 +9,16 @@ if [ -z "$GITHUB_TOKEN" ]; then
     exit 1
 fi
 
-# Extract the module path and version from the Go module file
+# Extract the module path from the Go module file
 MODULE_PATH=$(go list -m)
-MODULE_VERSION=$(git describe --tags --abbrev=0)
+
+# Try to get the latest tag
+if git describe --tags --abbrev=0 &>/dev/null; then
+    MODULE_VERSION=$(git describe --tags --abbrev=0)
+else
+    echo "No tags found. Please ensure your repository has at least one tag."
+    exit 1
+fi
 
 echo "Publishing Go module $MODULE_PATH@$MODULE_VERSION"
 
@@ -22,3 +29,8 @@ echo "machine github.com login $GITHUB_ACTOR password $GITHUB_TOKEN" > ~/.netrc
 GOPROXY=proxy.golang.org go list -m $MODULE_PATH@$MODULE_VERSION
 
 echo "Module published successfully!"
+
+# Trigger indexing on pkg.go.dev
+curl https://pkg.go.dev/$MODULE_PATH@$MODULE_VERSION
+
+echo "Triggered pkg.go.dev indexing for $MODULE_PATH@$MODULE_VERSION"
