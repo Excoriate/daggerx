@@ -1,6 +1,6 @@
 ---
 name: ⭐ Feature Request
-about: Propose a great feature 
+about: Propose a great feature
 title: "[Feature Title]"
 labels: "enhancement"
 ---

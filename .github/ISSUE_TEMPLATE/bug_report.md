@@ -6,7 +6,7 @@ labels: "bug"
 ---
 
 ## 🪲 Describe the Bug
-Provide a clear explanation of the bug. 
+Provide a clear explanation of the bug.
 
 ## ⚡️ Type of Bug
 Please select the type of bug you are reporting:
