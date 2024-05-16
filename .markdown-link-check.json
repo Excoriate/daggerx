@@ -21,6 +21,9 @@
     },
     {
       "pattern": "^CHANGELOG.md"
+    },
+    {
+      "pattern": "^https://github.com/Excoriate/.*/compare/"
     }
   ],
   "retryCount": 5,
