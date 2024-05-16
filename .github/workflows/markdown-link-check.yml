@@ -3,7 +3,7 @@ name: Check Markdown links
 on:
     workflow_dispatch:
     push:
-      branches-ignore: [main]
+        branches-ignore: [main]
     pull_request:
         branches: [main]
 jobs:
