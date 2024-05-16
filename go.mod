@@ -2,8 +2,9 @@ module github.com/Excoriate/daggerx
 
 go 1.22.3
 
+require dagger.io/dagger v0.11.4
+
 require (
-	dagger.io/dagger v0.11.4 // indirect
 	github.com/99designs/gqlgen v0.17.44 // indirect
 	github.com/Khan/genqlient v0.7.0 // indirect
 	github.com/adrg/xdg v0.4.0 // indirect

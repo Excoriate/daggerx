@@ -19,9 +19,9 @@ jobs:
             - name: GoTest
               uses: dagger/dagger-for-github@v5
               with:
-                verb: call
-                module: github.com/Excoriate/daggerverse/gotest@v1.12.1
-                args: run-go-test-sum --src="." --enable-pretty --enable-cache
-                version: "0.11.4"
+                  verb: call
+                  module: github.com/Excoriate/daggerverse/gotest@v1.12.1
+                  args: run-go-test-sum --src="." --enable-pretty --enable-cache
+                  version: 0.11.4
               env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
