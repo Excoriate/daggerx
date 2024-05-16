@@ -9,9 +9,16 @@ if [ -z "$GITHUB_TOKEN" ]; then
     exit 1
 fi
 
-# Extract the module path and version from the Go module file
+# Extract the module path from the Go module file
 MODULE_PATH=$(go list -m)
-MODULE_VERSION=$(git describe --tags --abbrev=0)
+
+# Try to get the latest tag
+if git describe --tags --abbrev=0 &>/dev/null; then
+    MODULE_VERSION=$(git describe --tags --abbrev=0)
+else
+    echo "No tags found. Please ensure your repository has at least one tag."
+    exit 1
+fi
 
 echo "Publishing Go module $MODULE_PATH@$MODULE_VERSION"
 
