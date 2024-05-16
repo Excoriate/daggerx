@@ -18,6 +18,9 @@
     },
     {
       "pattern": "^docs/templates/"
+    },
+    {
+      "pattern": "^CHANGELOG.md"
     }
   ],
   "retryCount": 5,

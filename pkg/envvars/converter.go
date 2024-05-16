@@ -9,8 +9,22 @@ import (
 
 // ToDaggerEnvVarsFromStr converts a comma-separated string of key=value pairs into a map.
 // It ensures all entries are valid and handles empty strings gracefully.
-// This function converts a string of key=value pairs into a map of strings.
-// Example input: "key1=value1,key2=value2,key3=value3"
+//
+// Parameters:
+//   - envVars: A comma-separated string of key=value pairs. For example: "key1=value1,key2=value2,key3=value3".
+//
+// Returns:
+//   - A map of strings where each key is an environment variable name and each value is the corresponding value.
+//   - An error if the input string is empty or if any of the key=value pairs are invalid.
+//
+// Example:
+//
+//	envVarsStr := "FOO=bar,BAZ=qux"
+//	envVarsMap, err := ToDaggerEnvVarsFromStr(envVarsStr)
+//	if err != nil {
+//	    // handle error
+//	}
+//	// Use envVarsMap, e.g., fmt.Println(envVarsMap["FOO"]) // Output: bar
 func ToDaggerEnvVarsFromStr(envVars string) (map[string]string, error) {
 	if envVars == "" {
 		return nil, errors.New("input string is empty")
@@ -40,6 +54,22 @@ func ToDaggerEnvVarsFromStr(envVars string) (map[string]string, error) {
 
 // ToDaggerEnvVarsFromMap converts a map of environment variables into a slice of DaggerEnvVars.
 // It ensures all entries are valid and handles empty maps gracefully.
+//
+// Parameters:
+//   - envVarsMap: A map of environment variables where each key is a variable name and each value is the corresponding value.
+//
+// Returns:
+//   - A slice of DaggerEnvVars, each containing the name and value of an environment variable.
+//   - An error if the input map is empty or contains an empty key.
+//
+// Example:
+//
+//	envVarsMap := map[string]string{"FOO": "bar", "BAZ": "qux"}
+//	envVarsSlice, err := ToDaggerEnvVarsFromMap(envVarsMap)
+//	if err != nil {
+//	    // handle error
+//	}
+//	// Use envVarsSlice, e.g., fmt.Println(envVarsSlice)
 func ToDaggerEnvVarsFromMap(envVarsMap map[string]string) ([]types.DaggerEnvVars, error) {
 	if len(envVarsMap) == 0 {
 		return nil, errors.New("input map is empty")
@@ -60,6 +90,22 @@ func ToDaggerEnvVarsFromMap(envVarsMap map[string]string) ([]types.DaggerEnvVars
 
 // ToDaggerEnvVarsFromSlice converts a slice of key=value strings into a slice of DaggerEnvVars.
 // It validates each entry and skips invalid entries.
+//
+// Parameters:
+//   - envVarsSlice: A slice of strings where each string is a key=value pair representing an environment variable.
+//
+// Returns:
+//   - A slice of DaggerEnvVars, each containing the name and value of an environment variable.
+//   - An error if the input slice is empty or if any of the key=value pairs are invalid.
+//
+// Example:
+//
+//	envVarsSlice := []string{"FOO=bar", "BAZ=qux"}
+//	envVars, err := ToDaggerEnvVarsFromSlice(envVarsSlice)
+//	if err != nil {
+//	    // handle error
+//	}
+//	// Use envVars, e.g., fmt.Println(envVars)
 func ToDaggerEnvVarsFromSlice(envVarsSlice []string) ([]types.DaggerEnvVars, error) {
 	if len(envVarsSlice) == 0 {
 		return nil, errors.New("input slice is empty")
