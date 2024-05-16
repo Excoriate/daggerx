@@ -9,8 +9,6 @@ dotenv: ['.env.{{.ENV}}.aws', '.env.{{.ENV}}.terraform', '.env.{{.ENV}}.terragru
 includes:
     precommit:
         taskfile: ./taskfiles/taskfile.precommit.yml
-    tf:
-        taskfile: ./taskfiles/Taskfile.terraform.yml
     golang:
         taskfile: ./taskfiles/Taskfile.go.yml
 tasks:

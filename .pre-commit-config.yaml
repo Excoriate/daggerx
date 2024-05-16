@@ -61,7 +61,7 @@ repos:
             files: ^(pkg|cli|cmd)/(.*/)*.*\.go$
 
     - repo: https://github.com/igorshubovych/markdownlint-cli
-      rev: v0.39.0
+      rev: v0.40.0
       hooks:
           - id: markdownlint
             args: [--fix, .]
@@ -75,7 +75,7 @@ repos:
                 - --config=.markdown-link-check.json
 
     - repo: https://github.com/golangci/golangci-lint
-      rev: v1.57.2
+      rev: v1.58.1
       hooks:
           - id: golangci-lint
             args: [--config, .golangci.yml]
