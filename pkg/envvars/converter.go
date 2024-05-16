@@ -7,11 +7,11 @@ import (
 	"strings"
 )
 
-// toEnvVarsFromStr converts a comma-separated string of key=value pairs into a map.
+// ToDaggerEnvVarsFromStr converts a comma-separated string of key=value pairs into a map.
 // It ensures all entries are valid and handles empty strings gracefully.
-// This function converts a string of key=value pairs into a map of strings, see for example:
-// "key1=value1,key2=value2,key3=value3"
-func toEnvVarsFromStr(envVars string) (map[string]string, error) {
+// This function converts a string of key=value pairs into a map of strings.
+// Example input: "key1=value1,key2=value2,key3=value3"
+func ToDaggerEnvVarsFromStr(envVars string) (map[string]string, error) {
 	if envVars == "" {
 		return nil, errors.New("input string is empty")
 	}
@@ -38,9 +38,9 @@ func toEnvVarsFromStr(envVars string) (map[string]string, error) {
 	return envVarsMap, nil
 }
 
-// toEnvVarsDaggerFromMap converts a map of environment variables into a slice of DaggerEnvVars.
-// It ensures all entries are valid.
-func toEnvVarsDaggerFromMap(envVarsMap map[string]string) ([]types.DaggerEnvVars, error) {
+// ToDaggerEnvVarsFromMap converts a map of environment variables into a slice of DaggerEnvVars.
+// It ensures all entries are valid and handles empty maps gracefully.
+func ToDaggerEnvVarsFromMap(envVarsMap map[string]string) ([]types.DaggerEnvVars, error) {
 	if len(envVarsMap) == 0 {
 		return nil, errors.New("input map is empty")
 	}
@@ -58,9 +58,9 @@ func toEnvVarsDaggerFromMap(envVarsMap map[string]string) ([]types.DaggerEnvVars
 	return envVars, nil
 }
 
-// toEnvVarsDaggerFromSlice converts a slice of key=value strings into a slice of DaggerEnvVars.
+// ToDaggerEnvVarsFromSlice converts a slice of key=value strings into a slice of DaggerEnvVars.
 // It validates each entry and skips invalid entries.
-func toEnvVarsDaggerFromSlice(envVarsSlice []string) ([]types.DaggerEnvVars, error) {
+func ToDaggerEnvVarsFromSlice(envVarsSlice []string) ([]types.DaggerEnvVars, error) {
 	if len(envVarsSlice) == 0 {
 		return nil, errors.New("input slice is empty")
 	}
