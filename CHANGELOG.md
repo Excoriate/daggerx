@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.3](https://github.com/Excoriate/daggerx/compare/v0.0.2...v0.0.3) (2024-05-16)
+
+
+### Features
+
+* Add test for BuildArgs function in execmd package ([#13](https://github.com/Excoriate/daggerx/issues/13)) ([336a12e](https://github.com/Excoriate/daggerx/commit/336a12ef2f46337e90089413b33a9b142cb5b6bd))
+
 ## [0.0.2](https://github.com/Excoriate/daggerx/compare/v0.0.1...v0.0.2) (2024-05-16)
 
 
