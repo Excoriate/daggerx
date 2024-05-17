@@ -2,6 +2,15 @@ package conv
 
 import "dagger.io/dagger"
 
+func ToAnyType[T any](input interface{}) *T {
+	ctr, ok := input.(*T)
+	if !ok {
+		return nil
+	}
+
+	return ctr
+}
+
 func ToDaggerPlatform(input interface{}) dagger.Platform {
 	platform, ok := input.(dagger.Platform)
 	if !ok {

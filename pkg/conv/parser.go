@@ -5,19 +5,21 @@ import (
 	"fmt"
 )
 
-func ToFnContainer[T any](input interface{}) *T {
-	ctr, ok := input.(*T)
+func ToFnContainer[T any](input interface{}) T {
+	ctr, ok := input.(T)
 	if !ok {
-		return nil
+		var zero T
+		return zero
 	}
 
 	return ctr
 }
 
-func ToFnContainerE[T any](input interface{}) (*T, error) {
-	ctr, ok := input.(*T)
+func ToFnContainerE[T any](input interface{}) (T, error) {
+	ctr, ok := input.(T)
 	if !ok {
-		return nil, fmt.Errorf("failed to assert type, the passed type is not a *Container")
+		var zero T
+		return zero, fmt.Errorf("failed to assert type, the passed type is not a Container")
 	}
 
 	return ctr, nil
