@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.8](https://github.com/Excoriate/daggerx/compare/v0.0.7...v0.0.8) (2024-05-17)
+
+
+### Bug Fixes
+
+* convert directly from string to dagger env vars ([b054699](https://github.com/Excoriate/daggerx/commit/b0546992d1902d5cc181a07ae21147d1c7b83d87))
+
 ## [0.0.7](https://github.com/Excoriate/daggerx/compare/v0.0.6...v0.0.7) (2024-05-17)
 
 
