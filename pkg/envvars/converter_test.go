@@ -1,32 +1,53 @@
 package envvars
 
 import (
+	"errors"
+	"fmt"
 	"github.com/Excoriate/daggerx/pkg/types"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestToEnvVarsFromStr(t *testing.T) {
+func TestToDaggerEnvVarsFromStr(t *testing.T) {
 	tests := []struct {
+		name     string
 		input    string
-		expected map[string]string
-		err      bool
+		expected []types.DaggerEnvVars
+		err      error
 	}{
-		{"key1=value1,key2=value2,key3=value3", map[string]string{"key1": "value1", "key2": "value2", "key3": "value3"}, false},
-		{"key1=value1,key2=value2,key3=", map[string]string{"key1": "value1", "key2": "value2", "key3": ""}, false},
-		{"key1=value1,key2=value2,key3", nil, true},
-		{"", nil, true},
-		{"key1=,key2=value2,key3=value3", map[string]string{"key1": "", "key2": "value2", "key3": "value3"}, false},
-		{",key1=value1,key2=value2", map[string]string{"key1": "value1", "key2": "value2"}, false},
+		{
+			name:  "Valid key=value pairs",
+			input: "FOO=bar,BAZ=qux",
+			expected: []types.DaggerEnvVars{
+				{Name: "FOO", Value: "bar"},
+				{Name: "BAZ", Value: "qux"},
+			},
+			err: nil,
+		},
+		{
+			name:     "Empty input string",
+			input:    "",
+			expected: nil,
+			err:      errors.New("input string is empty"),
+		},
+		{
+			name:     "Invalid key=value format",
+			input:    "FOO=bar,INVALID",
+			expected: nil,
+			err:      fmt.Errorf("invalid environment variable format: INVALID"),
+		},
 	}
 
 	for _, test := range tests {
-		result, err := ToDaggerEnvVarsFromStr(test.input)
-		if (err != nil) != test.err {
-			t.Errorf("ToDaggerEnvVarsFromStr(%q) returned error %v, expected error: %v", test.input, err, test.err)
-		}
-		if !test.err && !equal(result, test.expected) {
-			t.Errorf("ToDaggerEnvVarsFromStr(%q) = %v, expected %v", test.input, result, test.expected)
-		}
+		t.Run(test.name, func(t *testing.T) {
+			result, err := ToDaggerEnvVarsFromStr(test.input)
+			if test.err != nil {
+				assert.EqualError(t, err, test.err.Error())
+			} else {
+				assert.NoError(t, err)
+			}
+			assert.Equal(t, test.expected, result)
+		})
 	}
 }
 

@@ -7,49 +7,31 @@ import (
 	"strings"
 )
 
-// ToDaggerEnvVarsFromStr converts a comma-separated string of key=value pairs into a map.
+// ToDaggerEnvVarsFromStr converts a comma-separated string of key=value pairs into a slice of DaggerEnvVars.
 // It ensures all entries are valid and handles empty strings gracefully.
 //
 // Parameters:
 //   - envVars: A comma-separated string of key=value pairs. For example: "key1=value1,key2=value2,key3=value3".
 //
 // Returns:
-//   - A map of strings where each key is an environment variable name and each value is the corresponding value.
+//   - A slice of DaggerEnvVars, each containing the name and value of an environment variable.
 //   - An error if the input string is empty or if any of the key=value pairs are invalid.
 //
 // Example:
 //
 //	envVarsStr := "FOO=bar,BAZ=qux"
-//	envVarsMap, err := ToDaggerEnvVarsFromStr(envVarsStr)
+//	envVars, err := ToDaggerEnvVarsFromStr(envVarsStr)
 //	if err != nil {
 //	    // handle error
 //	}
-//	// Use envVarsMap, e.g., fmt.Println(envVarsMap["FOO"]) // Output: bar
-func ToDaggerEnvVarsFromStr(envVars string) (map[string]string, error) {
+//	// Use envVars, e.g., fmt.Println(envVars)
+func ToDaggerEnvVarsFromStr(envVars string) ([]types.DaggerEnvVars, error) {
 	if envVars == "" {
 		return nil, errors.New("input string is empty")
 	}
 
-	envVarsMap := make(map[string]string)
-	parts := strings.Split(envVars, ",")
-	for _, envVar := range parts {
-		if envVar == "" {
-			continue
-		}
-
-		pair := strings.SplitN(envVar, "=", 2)
-		if len(pair) != 2 {
-			return nil, fmt.Errorf("invalid environment variable format: %s", envVar)
-		}
-
-		key, value := strings.TrimSpace(pair[0]), strings.TrimSpace(pair[1])
-		if key == "" {
-			return nil, fmt.Errorf("empty key in environment variable: %s", envVar)
-		}
-
-		envVarsMap[key] = value
-	}
-	return envVarsMap, nil
+	envVarsSlice := strings.Split(envVars, ",")
+	return ToDaggerEnvVarsFromSlice(envVarsSlice)
 }
 
 // ToDaggerEnvVarsFromMap converts a map of environment variables into a slice of DaggerEnvVars.
