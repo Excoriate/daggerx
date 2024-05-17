@@ -26,11 +26,11 @@ echo "Publishing Go module $MODULE_PATH@$MODULE_VERSION"
 echo "machine github.com login $GITHUB_ACTOR password $GITHUB_TOKEN" > ~/.netrc
 
 # Push the module version to the Go module proxy
-GOPROXY=proxy.golang.org go list -m $MODULE_PATH@$MODULE_VERSION
+GOPROXY=proxy.golang.org go list -m "$MODULE_PATH@$MODULE_VERSION"
 
 echo "Module published successfully!"
 
 # Trigger indexing on pkg.go.dev
-curl https://pkg.go.dev/$MODULE_PATH@$MODULE_VERSION
+curl "https://pkg.go.dev/$MODULE_PATH@$MODULE_VERSION"
 
 echo "Triggered pkg.go.dev indexing for $MODULE_PATH@$MODULE_VERSION"
