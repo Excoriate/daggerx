@@ -1,4 +1,4 @@
-package apis
+package containerx
 
 import (
 	"dagger.io/dagger"
@@ -23,9 +23,9 @@ import (
 //	updatedCtr := WithPlatform("linux/amd64", ctr)
 //	// The container now has the environment variables "GOOS", "GOARCH", and "GOARM" set accordingly
 func WithGoPlatform(
-	platform dagger.Platform, // The target platform in "[os]/[platform]/[version]" format.
 	ctr *dagger.Container, // The base container to use.
-) *dagger.Container {
+	platform dagger.Platform, // The target platform in "[os]/[platform]/[version]" format.
+) interface{} {
 	if platform == "" {
 		return ctr
 	}

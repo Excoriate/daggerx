@@ -1,4 +1,4 @@
-package apis
+package containerx
 
 import "dagger.io/dagger"
 

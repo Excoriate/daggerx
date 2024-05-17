@@ -1,6 +1,6 @@
 module github.com/Excoriate/daggerx
 
-go 1.22.3
+go 1.22.2
 
 require (
 	dagger.io/dagger v0.11.4
