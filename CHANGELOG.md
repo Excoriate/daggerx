@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.5](https://github.com/Excoriate/daggerx/compare/v0.0.4...v0.0.5) (2024-05-17)
+
+
+### Refactoring
+
+* adjust api structure, add type converter ([9b43cad](https://github.com/Excoriate/daggerx/commit/9b43cade168e058fae05698d0be8eb10d6cd382a))
+
 ## [0.0.4](https://github.com/Excoriate/daggerx/compare/v0.0.3...v0.0.4) (2024-05-17)
 
 
