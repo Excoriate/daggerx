@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.6](https://github.com/Excoriate/daggerx/compare/v0.0.5...v0.0.6) (2024-05-17)
+
+
+### Refactoring
+
+* adjust conversion functions ([1e662aa](https://github.com/Excoriate/daggerx/commit/1e662aa2521e881978289b57e01997ff95e9a218))
+
 ## [0.0.5](https://github.com/Excoriate/daggerx/compare/v0.0.4...v0.0.5) (2024-05-17)
 
 
