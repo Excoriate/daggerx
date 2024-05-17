@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.4](https://github.com/Excoriate/daggerx/compare/v0.0.3...v0.0.4) (2024-05-17)
+
+
+### Features
+
+* add built-in base containers per stack ([b6e9124](https://github.com/Excoriate/daggerx/commit/b6e91247b53b1f6c126b24dfcfbb9b72078c960e))
+
 ## [0.0.3](https://github.com/Excoriate/daggerx/compare/v0.0.2...v0.0.3) (2024-05-16)
 
 
