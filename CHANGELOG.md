@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.7](https://github.com/Excoriate/daggerx/compare/v0.0.6...v0.0.7) (2024-05-17)
+
+
+### Other
+
+* fix shell-check issue ([e925f58](https://github.com/Excoriate/daggerx/commit/e925f58450be0c6493b85b3c5f9f2caf21dca31c))
+
+
+### Refactoring
+
+* remove non-required functions ([f925194](https://github.com/Excoriate/daggerx/commit/f92519468f5a4db1cac68b1263e37e4e608df8a8))
+
 ## [0.0.6](https://github.com/Excoriate/daggerx/compare/v0.0.5...v0.0.6) (2024-05-17)
 
 
