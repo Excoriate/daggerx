@@ -13,6 +13,13 @@ func setDefaultIfEmpty(version string) string {
 	return version
 }
 
+type NewBaseContainerOpts struct {
+	// Image is the name of the image to use.
+	Image string
+	// Version is the version of the image to use.
+	Version string
+}
+
 // GetImageURL constructs the full image URL from the provided options.
 // It returns an error if the options are nil or the image name is empty.
 //

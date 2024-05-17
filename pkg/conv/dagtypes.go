@@ -1,30 +1,34 @@
 package conv
 
-import "dagger.io/dagger"
-
+// ToAnyType attempts to convert an input of any type to the specified type T.
+// It returns a pointer to the converted value if successful, or nil if the conversion fails.
+//
+// Parameters:
+//   - input: An interface{} representing the value to be converted.
+//
+// Returns:
+//   - A pointer to the converted value of type T, or nil if the conversion fails.
+//
+// Example:
+//
+//	var input interface{} = 123
+//	result := ToAnyType[int](input)
+//	if result != nil {
+//	    fmt.Println(*result) // Output: 123
+//	} else {
+//	    fmt.Println("Conversion failed")
+//	}
 func ToAnyType[T any](input interface{}) *T {
-	ctr, ok := input.(*T)
-	if !ok {
-		return nil
+	// Check if the input is already of type T.
+	if v, ok := input.(T); ok {
+		return &v
 	}
 
-	return ctr
-}
-
-func ToDaggerPlatform(input interface{}) dagger.Platform {
-	platform, ok := input.(dagger.Platform)
-	if !ok {
-		return ""
+	// Check if the input is a pointer to type T.
+	if v, ok := input.(*T); ok {
+		return v
 	}
 
-	return platform
-}
-
-func ToDaggerDir(input any) dagger.Directory {
-	dir, ok := input.(dagger.Directory)
-	if !ok {
-		return dagger.Directory{}
-	}
-
-	return dir
+	// Handle other potential cases.
+	return nil
 }
