@@ -1,8 +1,9 @@
 package execmd
 
 import (
-	"github.com/Excoriate/daggerx/pkg/types"
 	"strings"
+
+	"github.com/Excoriate/daggerx/pkg/types"
 )
 
 // BuildArgs processes and builds a command argument list from the provided arguments.

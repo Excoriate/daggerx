@@ -1,3 +1,0 @@
-package golangx
-
-var ()
