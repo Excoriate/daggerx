@@ -18,6 +18,8 @@ type NewBaseContainerOpts struct {
 	Image string
 	// Version is the version of the image to use.
 	Version string
+	// FallbackImage is the name of the fallback image to use if the primary image is empty.
+	FallbackImage string
 }
 
 // GetImageURL constructs the full image URL from the provided options.
@@ -46,12 +48,15 @@ func GetImageURL(opts *NewBaseContainerOpts) (string, error) {
 		return "", fmt.Errorf("failed to create base container: opts is nil")
 	}
 
-	// fail if image is empty
-	if opts.Image == "" {
-		return "", fmt.Errorf("failed to create base container: image is empty")
+	if opts.Image == "" && opts.FallbackImage == "" {
+		return "", fmt.Errorf("failed to create base container: both image and fallback image are empty")
 	}
 
-	opts.Version = setDefaultIfEmpty(opts.Version)
+	if opts.Image != "" {
+		opts.Version = setDefaultIfEmpty(opts.Version)
+		return fmt.Sprintf("%s:%s", opts.Image, opts.Version), nil
+	}
 
-	return fmt.Sprintf("%s:%s", opts.Image, opts.Version), nil
+	// Use the fallback image if the primary image is empty.
+	return fmt.Sprintf("%s:%s", opts.FallbackImage, setDefaultIfEmpty(opts.Version)), nil
 }
