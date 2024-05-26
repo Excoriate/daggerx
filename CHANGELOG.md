@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.9](https://github.com/Excoriate/daggerx/compare/v0.0.8...v0.0.9) (2024-05-26)
+
+
+### Refactoring
+
+* Organize import statements in execmd/args.go ([#24](https://github.com/Excoriate/daggerx/issues/24)) ([a2b0dab](https://github.com/Excoriate/daggerx/commit/a2b0dabe03370a32397caa89c570953ff9ffb994))
+
 ## [0.0.8](https://github.com/Excoriate/daggerx/compare/v0.0.7...v0.0.8) (2024-05-17)
 
 
