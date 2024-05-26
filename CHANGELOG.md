@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.10](https://github.com/Excoriate/daggerx/compare/v0.0.9...v0.0.10) (2024-05-26)
+
+
+### Features
+
+* Add default image name logic ([#26](https://github.com/Excoriate/daggerx/issues/26)) ([fd2d4f2](https://github.com/Excoriate/daggerx/commit/fd2d4f2acedc4723b311b7e47c018c5fcfd9a3fd))
+
 ## [0.0.9](https://github.com/Excoriate/daggerx/compare/v0.0.8...v0.0.9) (2024-05-26)
 
 
