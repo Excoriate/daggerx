@@ -35,39 +35,51 @@ func TestGetImageURL(t *testing.T) {
 		opts        *NewBaseContainerOpts
 		expectedURL string
 		expectedErr error
-	}{
-		{
-			name: "Valid input with version",
-			opts: &NewBaseContainerOpts{
-				Image:   "golang",
-				Version: "1.16",
-			},
-			expectedURL: "golang:1.16",
-			expectedErr: nil,
+	}{{
+		name: "Valid input with version",
+		opts: &NewBaseContainerOpts{
+			Image:   "golang",
+			Version: "1.16",
 		},
-		{
-			name: "Valid input without version",
-			opts: &NewBaseContainerOpts{
-				Image: "golang",
-			},
-			expectedURL: "golang:" + fixtures.ImageVersion,
-			expectedErr: nil,
+		expectedURL: "golang:1.16",
+		expectedErr: nil,
+	}, {
+		name: "Valid input without version",
+		opts: &NewBaseContainerOpts{
+			Image: "golang",
 		},
-		{
-			name:        "Nil opts",
-			opts:        nil,
-			expectedURL: "",
-			expectedErr: fmt.Errorf("failed to create base container: opts is nil"),
+		expectedURL: "golang:" + fixtures.ImageVersion,
+		expectedErr: nil,
+	}, {
+		name:        "Nil opts",
+		opts:        nil,
+		expectedURL: "",
+		expectedErr: fmt.Errorf("failed to create base container: opts is nil"),
+	}, {
+		name: "Empty image",
+		opts: &NewBaseContainerOpts{
+			Image: "",
 		},
-		{
-			name: "Empty image",
-			opts: &NewBaseContainerOpts{
-				Image: "",
-			},
-			expectedURL: "",
-			expectedErr: fmt.Errorf("failed to create base container: image is empty"),
+		expectedURL: "",
+		expectedErr: fmt.Errorf("failed to create base container: both image and fallback image are empty"),
+	}, {
+		name: "Fallback image used",
+		opts: &NewBaseContainerOpts{
+			FallbackImage: "fallback-image",
+			Version:       "1.0.0",
 		},
-	}
+		expectedURL: "fallback-image:1.0.0",
+		expectedErr: nil,
+	}, {
+		name: "Both image and fallback image used",
+		opts: &NewBaseContainerOpts{
+			Image:         "image-name",
+			FallbackImage: "fallback-image",
+			Version:       "2.0.0",
+		},
+		expectedURL: "image-name:2.0.0",
+		expectedErr: nil,
+	}}
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
