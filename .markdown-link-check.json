@@ -20,7 +20,7 @@
       "pattern": "^docs/templates/"
     },
     {
-      "pattern": "^CHANGELOG.md"
+      "pattern": "^CHANGELOG\\.md"
     },
     {
       "pattern": "^https://github.com/Excoriate/.*/compare/"
