@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.11](https://github.com/Excoriate/daggerx/compare/v0.0.10...v0.0.11) (2024-05-27)
+
+
+### Refactoring
+
+* Refactored BuildArgs function to improve argument processing. ([#28](https://github.com/Excoriate/daggerx/issues/28)) ([b0e0061](https://github.com/Excoriate/daggerx/commit/b0e0061f88194e933e52913f946ab361af67ec06))
+
 ## [0.0.10](https://github.com/Excoriate/daggerx/compare/v0.0.9...v0.0.10) (2024-05-26)
 
 
