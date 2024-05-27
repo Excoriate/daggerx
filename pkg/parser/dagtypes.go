@@ -1,4 +1,4 @@
-package conv
+package parser
 
 // ToAnyType attempts to convert an input of any type to the specified type T.
 // It returns a pointer to the converted value if successful, or nil if the conversion fails.
