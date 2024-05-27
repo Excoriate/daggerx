@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.12](https://github.com/Excoriate/daggerx/compare/v0.0.11...v0.0.12) (2024-05-27)
+
+
+### Features
+
+* Add tests and implementation for converting DaggerCMD to string and generating sh command ([#30](https://github.com/Excoriate/daggerx/issues/30)) ([87a2b4d](https://github.com/Excoriate/daggerx/commit/87a2b4daad428275e10824c6df1609f156d50f2e))
+* **cleaner:** Add RemoveCommas function and test cases ([#32](https://github.com/Excoriate/daggerx/issues/32)) ([14c94c6](https://github.com/Excoriate/daggerx/commit/14c94c62b5733c28a9ba350b407f028a514d44b6))
+
+
+### Refactoring
+
+* Move ToAnyType function from conv package to parser package for better structuring. ([#33](https://github.com/Excoriate/daggerx/issues/33)) ([4da61da](https://github.com/Excoriate/daggerx/commit/4da61dacd90db179648dc1b4542b1b079e77da6d))
+
 ## [0.0.11](https://github.com/Excoriate/daggerx/compare/v0.0.10...v0.0.11) (2024-05-27)
 
 
