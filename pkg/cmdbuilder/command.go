@@ -1,12 +1,11 @@
-package execmd
+package cmdbuilder
 
 import (
 	"fmt"
 	"strings"
-)
 
-// DaggerCMD is an alias for a slice of strings representing a command.
-type DaggerCMD []string
+	"github.com/Excoriate/daggerx/pkg/types"
+)
 
 // GenerateCommand generates a command with the provided arguments.
 // It ensures that arguments with spaces are handled correctly.
@@ -34,14 +33,14 @@ type DaggerCMD []string
 //	    // handle error
 //	}
 //	// Use cmd, e.g., fmt.Println(*cmd) // Output: [go run main.go --verbose]
-func GenerateCommand(command string, args ...string) (*DaggerCMD, error) {
+func GenerateCommand(command string, args ...string) (*types.DaggerCMD, error) {
 	// Validate the command
 	if command == "" {
 		return nil, fmt.Errorf("command cannot be empty")
 	}
 
 	// Initialize the command slice with the main command
-	cmdWithArgs := DaggerCMD{command}
+	cmdWithArgs := types.DaggerCMD{command}
 
 	for _, arg := range args {
 		if arg == "" {

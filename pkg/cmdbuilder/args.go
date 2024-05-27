@@ -1,4 +1,4 @@
-package execmd
+package cmdbuilder
 
 import (
 	"strings"
