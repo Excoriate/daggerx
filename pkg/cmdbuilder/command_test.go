@@ -4,6 +4,8 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/Excoriate/daggerx/pkg/types"
 )
 
@@ -123,5 +125,68 @@ func TestGenerateCommand(t *testing.T) {
 				t.Errorf("GenerateCommand(%q, %v) = %v, expected %v", test.command, test.args, *result, test.expected)
 			}
 		})
+	}
+}
+
+func TestConvertCMDToString(t *testing.T) {
+	tests := []struct {
+		cmd      *types.DaggerCMD
+		expected string
+	}{
+		{
+			cmd:      &types.DaggerCMD{"go", "run", "main.go", "--verbose"},
+			expected: "go run main.go --verbose",
+		},
+		{
+			cmd:      &types.DaggerCMD{"echo", "Hello, World!"},
+			expected: "echo Hello, World!",
+		},
+		{
+			cmd:      &types.DaggerCMD{"terraform", "plan", "-var", "foo=bar", "apply", "--auto-approve"},
+			expected: "terraform plan -var foo=bar apply --auto-approve",
+		},
+	}
+
+	for _, test := range tests {
+		result := ConvertCMDToString(test.cmd)
+		assert.Equal(t, test.expected, result)
+	}
+}
+
+func TestGenerateShCommand(t *testing.T) {
+	tests := []struct {
+		command  string
+		args     []string
+		expected string
+		hasError bool
+	}{
+		{
+			command:  "echo",
+			args:     []string{"Hello, World!"},
+			expected: "sh -c \"echo Hello, World!\"",
+			hasError: false,
+		},
+		{
+			command:  "go",
+			args:     []string{"run", "main.go", "--verbose"},
+			expected: "sh -c \"go run main.go --verbose\"",
+			hasError: false,
+		},
+		{
+			command:  "",
+			args:     []string{"run", "main.go"},
+			expected: "",
+			hasError: true,
+		},
+	}
+
+	for _, test := range tests {
+		result, err := GenerateShCommand(test.command, test.args...)
+		if test.hasError {
+			assert.Error(t, err)
+		} else {
+			assert.NoError(t, err)
+			assert.Equal(t, test.expected, result)
+		}
 	}
 }
