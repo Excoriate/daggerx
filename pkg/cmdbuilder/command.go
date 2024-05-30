@@ -115,5 +115,6 @@ func GenerateShCommand(command string, args ...string) (string, error) {
 	}
 
 	cmdString := ConvertCMDToString(&cmdWithArgs)
+	//nolint: gocritic // It's okay to use fmt.Sprintf here
 	return fmt.Sprintf("sh -c \"%s\"", cmdString), nil
 }
