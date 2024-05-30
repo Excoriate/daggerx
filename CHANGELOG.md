@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.13](https://github.com/Excoriate/daggerx/compare/v0.0.12...v0.0.13) (2024-05-30)
+
+
+### Features
+
+* Add DaggerEngine implementation ([#37](https://github.com/Excoriate/daggerx/issues/37)) ([20f6b3a](https://github.com/Excoriate/daggerx/commit/20f6b3a32eb4f9a472c820b1e91f48a045306e33))
+* Add tests for GetLogLevelFromEnv and NewLogger ([#36](https://github.com/Excoriate/daggerx/issues/36)) ([b36f920](https://github.com/Excoriate/daggerx/commit/b36f9202b540dbcaf90b859b1212e3543d702a25))
+
 ## [0.0.12](https://github.com/Excoriate/daggerx/compare/v0.0.11...v0.0.12) (2024-05-27)
 
 
