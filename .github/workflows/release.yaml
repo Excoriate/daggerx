@@ -34,21 +34,20 @@ jobs:
                   default-branch: main
 
     publish-go-module:
+        name: Publish Go Module with GoPublisher Dagger
         needs: release-please
         runs-on: ubuntu-latest
         if: ${{ needs.release-please.outputs.releases_created }}
         steps:
-            - name: Checkout
-              uses: actions/checkout@v3
-              with:
-                  fetch-depth: 0
+            - uses: actions/checkout@v3
             - name: Set up Go
               uses: actions/setup-go@v4
               with:
                   go-version: ${{ env.GO_VERSION }}
-            - name: Install dependencies
-              run: go mod tidy
-            - name: Publish Go module
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              run: ./scripts/publish-go-module.sh
+            - name: GoTest
+              uses: dagger/dagger-for-github@v5
+              with:
+                  verb: call
+                  module: github.com/Excoriate/daggerverse/gopublisher@v1.14.0
+                  args: go-mod-publish --src="."
+                  version: 0.11.6
