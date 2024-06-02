@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.15](https://github.com/Excoriate/daggerx/compare/v0.0.14...v0.0.15) (2024-06-02)
+
+
+### Features
+
+* add extensions for github, add new functionality for commands ([763194c](https://github.com/Excoriate/daggerx/commit/763194c88a42e1974a0872f5578fc56942d0bece))
+* add extensions for github, add new functionality for commands ([5aa33d2](https://github.com/Excoriate/daggerx/commit/5aa33d22636fa2a1ce783ddcc05c7ada63097c37))
+
 ## [0.0.14](https://github.com/Excoriate/daggerx/compare/v0.0.13...v0.0.14) (2024-06-02)
 
 
