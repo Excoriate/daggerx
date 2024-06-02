@@ -3,7 +3,7 @@ package cleaner
 import (
 	"testing"
 
-	"atomicgo.dev/assert"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRemoveCommas(t *testing.T) {
@@ -35,6 +35,6 @@ func TestRemoveCommas(t *testing.T) {
 
 	for _, test := range tests {
 		result := RemoveCommas(test.input)
-		assert.Equal(t, test.expected, result, "Expected %s but got %s", test.expected, result)
+		assert.Equalf(t, test.expected, result, "expected %s but got %s", test.expected, result)
 	}
 }
