@@ -49,5 +49,5 @@ jobs:
               with:
                   verb: call
                   module: github.com/Excoriate/daggerverse/gopublisher@v1.14.0
-                  args: go-mod-publish --src="{{github.workspace}}" --tag="${{ needs.release-please.outputs.tag_name }}"
+                  args: go-mod-publish --src="." --tag="${{ needs.release-please.outputs.tag_name }}"
                   version: 0.11.6
