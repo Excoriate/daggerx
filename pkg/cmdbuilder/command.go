@@ -118,3 +118,29 @@ func GenerateShCommand(command string, args ...string) (string, error) {
 	//nolint: gocritic // It's okay to use fmt.Sprintf here
 	return fmt.Sprintf("sh -c \"%s\"", cmdString), nil
 }
+
+// GenerateSHCommandAsDaggerCMD generates a command wrapped for execution using `sh -c` and returns a DaggerCMD.
+//
+// Parameters:
+//   - command: A string representing the main command to be executed.
+//   - args: A variadic slice of strings representing the arguments for the command.
+//
+// Returns:
+//   - A pointer to a DaggerCMD slice containing the complete command wrapped for `sh -c` execution.
+//   - An error if the main command is empty.
+//
+// Example:
+//
+//	cmd, err := GenerateSHCommandAsDaggerCMD("echo", "Hello, World!")
+//	if err != nil {
+//	    // handle error
+//	}
+//	fmt.Println(cmd) // Output: [sh -c "echo Hello, World!"]
+func GenerateSHCommandAsDaggerCMD(command string, args ...string) (*types.DaggerCMD, error) {
+	cmd, err := GenerateShCommand(command, args...)
+	if err != nil {
+		return nil, err
+	}
+
+	return &types.DaggerCMD{cmd}, nil
+}

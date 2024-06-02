@@ -190,3 +190,61 @@ func TestGenerateShCommand(t *testing.T) {
 		}
 	}
 }
+
+func TestGenerateSHCommandAsDaggerCMD(t *testing.T) {
+	tests := []struct {
+		name        string
+		command     string
+		args        []string
+		expected    *types.DaggerCMD
+		expectError bool
+	}{
+		{
+			name:        "Empty command",
+			command:     "",
+			args:        []string{},
+			expected:    nil,
+			expectError: true,
+		},
+		{
+			name:        "Simple command without args",
+			command:     "echo",
+			args:        []string{},
+			expected:    &types.DaggerCMD{"sh -c \"echo\""},
+			expectError: false,
+		},
+		{
+			name:        "Simple command with args",
+			command:     "echo",
+			args:        []string{"Hello, World!"},
+			expected:    &types.DaggerCMD{"sh -c \"echo Hello, World!\""},
+			expectError: false,
+		},
+		{
+			name:        "Command with multiple args",
+			command:     "terragrunt",
+			args:        []string{"-auto-approve", "--var-file=asdadas"},
+			expected:    &types.DaggerCMD{"sh -c \"terragrunt -auto-approve --var-file=asdadas\""},
+			expectError: false,
+		},
+		{
+			name:        "Command with special characters",
+			command:     "echo",
+			args:        []string{"Hello", "&&", "echo", "World!"},
+			expected:    &types.DaggerCMD{"sh -c \"echo Hello && echo World!\""},
+			expectError: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cmd, err := GenerateSHCommandAsDaggerCMD(tt.command, tt.args...)
+			if tt.expectError {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.expected, cmd)
+			}
+		})
+	}
+}
