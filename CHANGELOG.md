@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.16](https://github.com/Excoriate/daggerx/compare/v0.0.15...v0.0.16) (2024-06-02)
+
+
+### Features
+
+* add plain string to command conversion ([0dcd3a4](https://github.com/Excoriate/daggerx/commit/0dcd3a48795c871bb269c17750aa92b9a2a7ea70))
+
 ## [0.0.15](https://github.com/Excoriate/daggerx/compare/v0.0.14...v0.0.15) (2024-06-02)
 
 
