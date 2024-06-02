@@ -248,3 +248,67 @@ func TestGenerateSHCommandAsDaggerCMD(t *testing.T) {
 		})
 	}
 }
+
+func TestGenerateDaggerCMDFromStr(t *testing.T) {
+	tests := []struct {
+		name        string
+		commands    string
+		expected    []string
+		expectError bool
+	}{
+		{
+			name:        "Empty command string",
+			commands:    "",
+			expected:    nil,
+			expectError: true,
+		},
+		{
+			name:        "Blank spaces command string",
+			commands:    "     ",
+			expected:    nil,
+			expectError: true,
+		},
+		{
+			name:        "Simple command without args",
+			commands:    "terraform plan",
+			expected:    []string{"terraform", "plan"},
+			expectError: false,
+		},
+		{
+			name:        "Command with args",
+			commands:    "terraform plan --var-file=asdasda -auto-approve",
+			expected:    []string{"terraform", "plan", "--var-file=asdasda", "-auto-approve"},
+			expectError: false,
+		},
+		{
+			name:        "Complex command with pipes",
+			commands:    "terraform show -json | jq",
+			expected:    []string{"terraform", "show", "-json", "|", "jq"},
+			expectError: false,
+		},
+		{
+			name:        "Command with consecutive spaces",
+			commands:    "  terraform   plan   --var-file=asdasda    -auto-approve  ",
+			expected:    []string{"terraform", "plan", "--var-file=asdasda", "-auto-approve"},
+			expectError: false,
+		},
+		{
+			name:        "Command with special characters",
+			commands:    "echo 'Hello, World!' && echo 'Done!'",
+			expected:    []string{"echo", "'Hello,", "World!'", "&&", "echo", "'Done!'"},
+			expectError: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := GenerateDaggerCMDFromStr(tt.commands)
+			if tt.expectError {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+				assert.Equal(t, tt.expected, result)
+			}
+		})
+	}
+}

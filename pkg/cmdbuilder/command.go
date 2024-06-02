@@ -1,6 +1,7 @@
 package cmdbuilder
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -143,4 +144,43 @@ func GenerateSHCommandAsDaggerCMD(command string, args ...string) (*types.Dagger
 	}
 
 	return &types.DaggerCMD{cmd}, nil
+}
+
+// GenerateDaggerCMDFromStr generates a DaggerCMD from a plain command string.
+// It splits the command string into a slice of strings, ensuring it handles
+// special characters and consecutive spaces correctly.
+//
+// Parameters:
+//   - commands: A string representing the command.
+//
+// Returns:
+//   - A slice of strings representing the command and its arguments.
+//   - An error if the command string is empty or invalid.
+func GenerateDaggerCMDFromStr(commands string) ([]string, error) {
+	if strings.TrimSpace(commands) == "" {
+		return nil, errors.New("command string cannot be empty")
+	}
+
+	// Split command string by spaces
+	cmdSlice := strings.Fields(commands)
+	if len(cmdSlice) == 0 {
+		return nil, errors.New("invalid command string")
+	}
+
+	return cmdSlice, nil
+}
+
+// PtToSlice converts a *types.DaggerCMD to a []string.
+//
+// Parameters:
+//   - cmd: A pointer to a DaggerCMD slice containing the command and its arguments.
+//
+// Returns:
+//   - A slice of strings representing the command and its arguments.
+//   - An error if the input DaggerCMD is nil.
+func PtToSlice(cmd *types.DaggerCMD) ([]string, error) {
+	if cmd == nil {
+		return nil, fmt.Errorf("input DaggerCMD cannot be nil")
+	}
+	return *cmd, nil
 }
