@@ -269,6 +269,35 @@ func GetCacheDir(mntPrefix string) string {
 	return filepath.Join(mntPrefix, "var", "cache", "apko")
 }
 
+// GetApkoConfigOrPreset returns the configuration file path if it is valid.
+// It takes two string parameters: 'mntPrefix' which is the mount prefix, and 'cfgFile' which is the configuration file path.
+// If 'mntPrefix' is empty, it defaults to fixtures.MntPrefix.
+// If 'cfgFile' is empty, it returns an error indicating that the config file is required.
+// If 'cfgFile' does not have an extension, it returns an error indicating that the config file must have an extension.
+// If 'cfgFile' does not have a .yaml or .yml extension, it returns an error indicating that the config file must have a .yaml or .yml extension.
+// It returns the configuration file path if all checks pass, otherwise it returns an error.
+func GetApkoConfigOrPreset(mntPrefix, cfgFile string) (string, error) {
+	if mntPrefix == "" {
+		mntPrefix = fixtures.MntPrefix
+	}
+
+	if cfgFile == "" {
+		return "", fmt.Errorf("config file is required")
+	}
+
+	ext := filepath.Ext(cfgFile)
+	if ext == "" {
+		return "", fmt.Errorf("config file must have an extension")
+	}
+
+	// Check if the file extension is .yaml or .yml
+	if ext != ".yaml" && ext != ".yml" {
+		return "", fmt.Errorf("config file must have a .yaml or .yml extension")
+	}
+
+	return cfgFile, nil
+}
+
 // GetOutputTarPath returns the APKO output tar file path.
 // It takes a string parameter 'mntPrefix' which is the mount prefix.
 // It returns the full path to the output tar file.
