@@ -21,8 +21,8 @@ func TestTerraformInstaller_GetInstallCommands(t *testing.T) {
 				{"curl", "-L", "-o", "/tmp/terraform.zip", "https://releases.hashicorp.com/terraform/1.9.4/terraform_1.9.4_linux_amd64.zip"},
 				{"unzip", "-d", "/usr/local/bin", "/tmp/terraform.zip"},
 				{"chmod", "+x", "/usr/local/bin/terraform"},
-				{"rm", "/tmp/terraform.zip"},
 				{"terraform", "--version"},
+				{"rm", "/tmp/terraform.zip"},
 			},
 		},
 		{
@@ -33,8 +33,8 @@ func TestTerraformInstaller_GetInstallCommands(t *testing.T) {
 				{"curl", "-L", "-o", "/tmp/terraform.zip", "https://releases.hashicorp.com/terraform/1.9.4/terraform_1.9.4_linux_amd64.zip"},
 				{"unzip", "-d", "/usr/local/bin", "/tmp/terraform.zip"},
 				{"chmod", "+x", "/usr/local/bin/terraform"},
-				{"rm", "/tmp/terraform.zip"},
 				{"terraform", "--version"},
+				{"rm", "/tmp/terraform.zip"},
 			},
 		},
 	}

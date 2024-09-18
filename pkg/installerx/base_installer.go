@@ -1,26 +1,27 @@
 package installerx
 
 import (
+	"fmt"
 	"strings"
 
 	"dagger.io/dagger"
 )
 
-// BaseInstaller provides common functionality for installers.
+// BaseInstaller implements the Installer interface
 type BaseInstaller struct {
-	version     string
-	releaseURL  string
-	binaryName  string
-	archiveType string
+	version    string
+	releaseURL string
+	binaryName string
+	fileExt    string
 }
 
 // NewBaseInstaller creates a new BaseInstaller instance.
-func NewBaseInstaller(version, releaseURL, binaryName, archiveType string) BaseInstaller {
-	return BaseInstaller{
-		version:     strings.TrimPrefix(version, "v"),
-		releaseURL:  releaseURL,
-		binaryName:  binaryName,
-		archiveType: archiveType,
+func NewBaseInstaller(version, releaseURL, binaryName, fileExt string) *BaseInstaller {
+	return &BaseInstaller{
+		version:    strings.TrimPrefix(version, "v"),
+		releaseURL: releaseURL,
+		binaryName: binaryName,
+		fileExt:    fileExt,
 	}
 }
 
@@ -28,13 +29,13 @@ func NewBaseInstaller(version, releaseURL, binaryName, archiveType string) BaseI
 func (bi *BaseInstaller) GetInstallCommands(url string) [][]string {
 	commands := [][]string{
 		{"mkdir", "-p", "/usr/local/bin"},
-		{"curl", "-L", "-o", "/tmp/" + bi.binaryName + "." + bi.archiveType, url},
+		{"curl", "-L", "-o", "/tmp/" + bi.binaryName + "." + bi.fileExt, url},
 	}
 
-	if bi.archiveType == "zip" {
-		commands = append(commands, []string{"unzip", "-d", "/usr/local/bin", "/tmp/" + bi.binaryName + "." + bi.archiveType})
+	if bi.fileExt == "zip" {
+		commands = append(commands, []string{"unzip", "-d", "/usr/local/bin", "/tmp/" + bi.binaryName + "." + bi.fileExt})
 	} else {
-		commands = append(commands, []string{"mv", "/tmp/" + bi.binaryName + "." + bi.archiveType, "/usr/local/bin/" + bi.binaryName})
+		commands = append(commands, []string{"mv", "/tmp/" + bi.binaryName + "." + bi.fileExt, "/usr/local/bin/" + bi.binaryName})
 	}
 
 	commands = append(commands,
@@ -42,8 +43,8 @@ func (bi *BaseInstaller) GetInstallCommands(url string) [][]string {
 		[]string{bi.binaryName, "--version"},
 	)
 
-	if bi.archiveType == "zip" {
-		commands = append(commands, []string{"rm", "/tmp/" + bi.binaryName + "." + bi.archiveType})
+	if bi.fileExt == "zip" {
+		commands = append(commands, []string{"rm", "/tmp/" + bi.binaryName + "." + bi.fileExt})
 	}
 
 	return commands
@@ -55,4 +56,10 @@ func (bi *BaseInstaller) Install(container *dagger.Container, commands [][]strin
 		container = container.WithExec(cmd)
 	}
 	return container
+}
+
+// GetLatestVersion returns the latest version of the binary.
+func (bi *BaseInstaller) GetLatestVersion() (string, error) {
+	// Default implementation, should be overridden by specific installers
+	return "", fmt.Errorf("GetLatestVersion not implemented for BaseInstaller")
 }

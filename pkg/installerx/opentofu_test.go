@@ -21,8 +21,8 @@ func TestOpenTofuInstaller_GetInstallCommands(t *testing.T) {
 				{"curl", "-L", "-o", "/tmp/tofu.zip", "https://github.com/opentofu/opentofu/releases/download/v1.5.0/tofu_1.5.0_linux_amd64.zip"},
 				{"unzip", "-d", "/usr/local/bin", "/tmp/tofu.zip"},
 				{"chmod", "+x", "/usr/local/bin/tofu"},
-				{"rm", "/tmp/tofu.zip"},
 				{"tofu", "--version"},
+				{"rm", "/tmp/tofu.zip"},
 			},
 		},
 		{
@@ -33,8 +33,8 @@ func TestOpenTofuInstaller_GetInstallCommands(t *testing.T) {
 				{"curl", "-L", "-o", "/tmp/tofu.zip", "https://github.com/opentofu/opentofu/releases/download/v1.5.0/tofu_1.5.0_linux_amd64.zip"},
 				{"unzip", "-d", "/usr/local/bin", "/tmp/tofu.zip"},
 				{"chmod", "+x", "/usr/local/bin/tofu"},
-				{"rm", "/tmp/tofu.zip"},
 				{"tofu", "--version"},
+				{"rm", "/tmp/tofu.zip"},
 			},
 		},
 	}

@@ -18,7 +18,8 @@ func TestTerragruntInstaller_GetInstallCommands(t *testing.T) {
 			version: "0.67.4",
 			expected: [][]string{
 				{"mkdir", "-p", "/usr/local/bin"},
-				{"curl", "-L", "-o", "/usr/local/bin/terragrunt", "https://github.com/gruntwork-io/terragrunt/releases/download/v0.67.4/terragrunt_linux_amd64"},
+				{"curl", "-L", "-o", "/tmp/terragrunt.", "https://github.com/gruntwork-io/terragrunt/releases/download/v0.67.4/terragrunt_linux_amd64"},
+				{"mv", "/tmp/terragrunt.", "/usr/local/bin/terragrunt"},
 				{"chmod", "+x", "/usr/local/bin/terragrunt"},
 				{"terragrunt", "--version"},
 			},
@@ -28,7 +29,8 @@ func TestTerragruntInstaller_GetInstallCommands(t *testing.T) {
 			version: "v0.67.4",
 			expected: [][]string{
 				{"mkdir", "-p", "/usr/local/bin"},
-				{"curl", "-L", "-o", "/usr/local/bin/terragrunt", "https://github.com/gruntwork-io/terragrunt/releases/download/v0.67.4/terragrunt_linux_amd64"},
+				{"curl", "-L", "-o", "/tmp/terragrunt.", "https://github.com/gruntwork-io/terragrunt/releases/download/v0.67.4/terragrunt_linux_amd64"},
+				{"mv", "/tmp/terragrunt.", "/usr/local/bin/terragrunt"},
 				{"chmod", "+x", "/usr/local/bin/terragrunt"},
 				{"terragrunt", "--version"},
 			},
