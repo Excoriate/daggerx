@@ -3,6 +3,7 @@ package builderx
 import (
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/Excoriate/daggerx/pkg/fixtures"
 )
@@ -40,9 +41,6 @@ type ApkoBuilder struct {
 	// keyringPaths is a slice of paths to keyring files used for package verification.
 	keyringPaths []string
 
-	// architectures is a slice of target architectures for the build.
-	architectures []string
-
 	// cacheDir is the directory used for caching build artifacts.
 	cacheDir string
 
@@ -78,6 +76,20 @@ type ApkoBuilder struct {
 
 	// tags is a slice of additional tags for the output image.
 	tags []string
+
+	// New fields
+	annotations   map[string]string
+	buildDate     string
+	lockfile      string
+	offline       bool
+	packageAppend []string
+	sbom          bool
+	sbomFormats   []string
+	sbomPath      string
+	vcs           bool
+	logLevel      string
+	logPolicy     []string
+	workdir       string
 }
 
 // WithBuildArch sets the build architecture for the APKO build.
@@ -91,9 +103,7 @@ func (b *ApkoBuilder) WithBuildArch(arch Architecture) *ApkoBuilder {
 // NewApkoBuilder creates a new ApkoBuilder with default settings.
 // It initializes the ApkoBuilder with default architectures "x86_64" and "aarch64".
 func NewApkoBuilder() *ApkoBuilder {
-	return &ApkoBuilder{
-		architectures: []string{"x86_64", "aarch64"}, // Default architectures
-	}
+	return &ApkoBuilder{}
 }
 
 // WithConfigFile sets the configuration file for the APKO build.
@@ -144,11 +154,11 @@ func (b *ApkoBuilder) WithAlpineKeyring() *ApkoBuilder {
 	return b
 }
 
-// WithArchitecture adds an architecture to the APKO build.
-// It takes a string parameter 'arch' which is the architecture to be added.
+// WithArchitecture sets the build architecture for the APKO build.
+// It takes a string parameter 'arch' which is the desired build architecture.
 // It returns the updated ApkoBuilder instance.
 func (b *ApkoBuilder) WithArchitecture(arch string) *ApkoBuilder {
-	b.architectures = append(b.architectures, arch)
+	b.buildArch = arch
 	return b
 }
 
@@ -216,8 +226,82 @@ func (b *ApkoBuilder) WithTag(tag ...string) *ApkoBuilder {
 	return b
 }
 
+// WithAnnotations adds OCI annotations to the APKO build.
+func (b *ApkoBuilder) WithAnnotations(annotations map[string]string) *ApkoBuilder {
+	b.annotations = annotations
+	return b
+}
+
+// WithBuildDate sets the build date for the APKO build.
+func (b *ApkoBuilder) WithBuildDate(date string) *ApkoBuilder {
+	b.buildDate = date
+	return b
+}
+
+// WithLockfile sets the lockfile path for the APKO build.
+func (b *ApkoBuilder) WithLockfile(path string) *ApkoBuilder {
+	b.lockfile = path
+	return b
+}
+
+// WithOffline enables offline mode for the APKO build.
+func (b *ApkoBuilder) WithOffline() *ApkoBuilder {
+	b.offline = true
+	return b
+}
+
+// WithPackageAppend adds extra packages to the APKO build.
+func (b *ApkoBuilder) WithPackageAppend(packages ...string) *ApkoBuilder {
+	b.packageAppend = append(b.packageAppend, packages...)
+	return b
+}
+
+// WithSBOM enables or disables SBOM generation.
+func (b *ApkoBuilder) WithSBOM(enable bool) *ApkoBuilder {
+	b.sbom = enable
+	return b
+}
+
+// WithSBOMFormats sets the SBOM formats for the APKO build.
+func (b *ApkoBuilder) WithSBOMFormats(formats ...string) *ApkoBuilder {
+	b.sbomFormats = formats
+	return b
+}
+
+// WithSBOMPath sets the SBOM output path for the APKO build.
+func (b *ApkoBuilder) WithSBOMPath(path string) *ApkoBuilder {
+	b.sbomPath = path
+	return b
+}
+
+// WithVCS enables or disables VCS detection.
+func (b *ApkoBuilder) WithVCS(enable bool) *ApkoBuilder {
+	b.vcs = enable
+	return b
+}
+
+// WithLogLevel sets the log level for the APKO build.
+func (b *ApkoBuilder) WithLogLevel(level string) *ApkoBuilder {
+	b.logLevel = level
+	return b
+}
+
+// WithLogPolicy sets the log policy for the APKO build.
+func (b *ApkoBuilder) WithLogPolicy(policies ...string) *ApkoBuilder {
+	b.logPolicy = policies
+	return b
+}
+
+// WithWorkdir sets the working directory for the APKO build.
+func (b *ApkoBuilder) WithWorkdir(dir string) *ApkoBuilder {
+	b.workdir = dir
+	return b
+}
+
 // BuildCommand generates the APKO build command based on the current configuration of the ApkoBuilder.
 // It returns a slice of strings representing the command and an error if any required fields are missing.
+//
+//nolint:funlen // TODO: Refactor this function to make it more readable
 func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 	if b.configFile == "" {
 		return nil, fmt.Errorf("config file is required")
@@ -241,16 +325,12 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 		cmd = append(cmd, "--keyring-append", "/etc/apk/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub")
 	}
 
-	for _, arch := range b.architectures {
-		cmd = append(cmd, "--arch", arch)
-	}
-
 	if b.cacheDir != "" {
 		cmd = append(cmd, "--cache-dir", b.cacheDir)
 	}
 
 	if b.buildArch != "" {
-		cmd = append(cmd, "--build-arch", b.buildArch)
+		cmd = append(cmd, "--arch", b.buildArch)
 	}
 
 	if b.buildContext != "" {
@@ -279,6 +359,55 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 
 	if len(b.tags) > 0 {
 		cmd = append(cmd, "--tag", b.tags[0])
+	}
+
+	// Add new flags
+	for k, v := range b.annotations {
+		cmd = append(cmd, "--annotations", fmt.Sprintf("%s:%s", k, v))
+	}
+
+	if b.buildDate != "" {
+		cmd = append(cmd, "--build-date", b.buildDate)
+	}
+
+	if b.lockfile != "" {
+		cmd = append(cmd, "--lockfile", b.lockfile)
+	}
+
+	if b.offline {
+		cmd = append(cmd, "--offline")
+	}
+
+	for _, pkg := range b.packageAppend {
+		cmd = append(cmd, "--package-append", pkg)
+	}
+
+	if !b.sbom {
+		cmd = append(cmd, "--sbom=false")
+	}
+
+	if len(b.sbomFormats) > 0 {
+		cmd = append(cmd, "--sbom-formats", strings.Join(b.sbomFormats, ","))
+	}
+
+	if b.sbomPath != "" {
+		cmd = append(cmd, "--sbom-path", b.sbomPath)
+	}
+
+	if !b.vcs {
+		cmd = append(cmd, "--vcs=false")
+	}
+
+	if b.logLevel != "" {
+		cmd = append(cmd, "--log-level", b.logLevel)
+	}
+
+	for _, policy := range b.logPolicy {
+		cmd = append(cmd, "--log-policy", policy)
+	}
+
+	if b.workdir != "" {
+		cmd = append(cmd, "--workdir", b.workdir)
 	}
 
 	cmd = append(cmd, b.configFile, b.outputImage)
