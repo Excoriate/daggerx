@@ -80,7 +80,7 @@ func main() {
 
     fmt.Println("Generated Command:", *cmd)
 }
-````
+```
 
 ### Convert slice of key=value strings to slice of DaggerEnvVars
 
@@ -106,9 +106,6 @@ func main() {
 }
 
 ```
-
----
-
 
 ## Contributing
 
