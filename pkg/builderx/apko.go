@@ -25,32 +25,67 @@ const (
 	ApkoDefaultRepositoryURL = "cgr.dev/chainguard/apko"
 )
 
+// ApkoBuilder represents a builder for APKO (Alpine Package Keeper for OCI) images.
+// It encapsulates all the configuration options and settings needed to build an APKO image.
+type ApkoBuilder struct {
+	// configFile is the path to the APKO configuration file.
+	configFile string
+
+	// outputImage is the name of the output OCI image.
+	outputImage string
+
+	// outputTarball is the path where the output tarball will be saved.
+	outputTarball string
+
+	// keyringPaths is a slice of paths to keyring files used for package verification.
+	keyringPaths []string
+
+	// architectures is a slice of target architectures for the build.
+	architectures []string
+
+	// cacheDir is the directory used for caching build artifacts.
+	cacheDir string
+
+	// extraArgs is a slice of additional arguments to pass to the APKO build command.
+	extraArgs []string
+
+	// wolfiKeyring indicates whether to use the Wolfi keyring.
+	wolfiKeyring bool
+
+	// alpineKeyring indicates whether to use the Alpine keyring.
+	alpineKeyring bool
+
+	// buildArch specifies the architecture to build for.
+	buildArch string
+
+	// buildContext is the build context directory.
+	buildContext string
+
+	// debug enables debug mode for verbose output.
+	debug bool
+
+	// keyringAppendPlaintext is a slice of plaintext keys to append to the keyring.
+	keyringAppendPlaintext []string
+
+	// noNetwork disables network access during the build.
+	noNetwork bool
+
+	// repositoryAppend is a slice of additional repositories to append.
+	repositoryAppend []string
+
+	// timestamp sets a specific timestamp for reproducible builds.
+	timestamp string
+
+	// tags is a slice of additional tags for the output image.
+	tags []string
+}
+
 // WithBuildArch sets the build architecture for the APKO build.
 // It takes an Architecture parameter 'arch' which is the desired build architecture.
 // It returns the updated ApkoBuilder instance.
 func (b *ApkoBuilder) WithBuildArch(arch Architecture) *ApkoBuilder {
 	b.buildArch = string(arch)
 	return b
-}
-
-type ApkoBuilder struct {
-	configFile             string
-	outputImage            string
-	outputTarball          string
-	keyringPaths           []string
-	architectures          []string
-	cacheDir               string
-	extraArgs              []string
-	wolfiKeyring           bool
-	alpineKeyring          bool
-	buildArch              string
-	buildContext           string
-	debug                  bool
-	keyringAppendPlaintext []string
-	noNetwork              bool
-	repositoryAppend       []string
-	timestamp              string
-	tags                   []string
 }
 
 // NewApkoBuilder creates a new ApkoBuilder with default settings.
@@ -130,12 +165,6 @@ func (b *ApkoBuilder) WithCacheDir(cacheDir string) *ApkoBuilder {
 // It returns the updated ApkoBuilder instance.
 func (b *ApkoBuilder) WithExtraArg(arg string) *ApkoBuilder {
 	b.extraArgs = append(b.extraArgs, arg)
-	return b
-}
-
-// WithBuildArch sets the build architecture
-func (b *ApkoBuilder) WithBuildArch(arch string) *ApkoBuilder {
-	b.buildArch = arch
 	return b
 }
 
