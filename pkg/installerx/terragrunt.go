@@ -1,5 +1,4 @@
 // Package installerx provides functionality for installing various tools, including Terragrunt.
-
 package installerx
 
 import (
