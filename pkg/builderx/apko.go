@@ -7,7 +7,30 @@ import (
 	"github.com/Excoriate/daggerx/pkg/fixtures"
 )
 
-// ApkoBuilder represents a builder for APKO commands
+// Architecture represents supported CPU architectures for APKO builds
+type Architecture string
+
+const (
+	// ArchX8664 represents the x86_64 architecture
+	ArchX8664 Architecture = "x86_64"
+	// ArchAarch64 represents the aarch64 architecture
+	ArchAarch64 Architecture = "aarch64"
+	// ArchArmv7 represents the armv7 architecture
+	ArchArmv7 Architecture = "armv7"
+	// ArchPpc64le represents the ppc64le architecture
+	ArchPpc64le Architecture = "ppc64le"
+	// ArchS390x represents the s390x architecture
+	ArchS390x Architecture = "s390x"
+)
+
+// WithBuildArch sets the build architecture for the APKO build.
+// It takes an Architecture parameter 'arch' which is the desired build architecture.
+// It returns the updated ApkoBuilder instance.
+func (b *ApkoBuilder) WithBuildArch(arch Architecture) *ApkoBuilder {
+	b.buildArch = string(arch)
+	return b
+}
+
 type ApkoBuilder struct {
 	configFile             string
 	outputImage            string
