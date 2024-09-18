@@ -11,34 +11,25 @@ const terragruntReleaseURL = "https://github.com/gruntwork-io/terragrunt/release
 
 // TerragruntInstaller handles the installation of Terragrunt.
 type TerragruntInstaller struct {
-	version string
+	BaseInstaller
 }
 
 // NewTerragruntInstaller creates a new TerragruntInstaller instance.
 func NewTerragruntInstaller(version string) *TerragruntInstaller {
 	return &TerragruntInstaller{
-		version: strings.TrimPrefix(version, "v"),
+		BaseInstaller: NewBaseInstaller(version, terragruntReleaseURL, "terragrunt", ""),
 	}
 }
 
 // GetInstallCommands returns the commands to install Terragrunt.
 func (tgi *TerragruntInstaller) GetInstallCommands() [][]string {
-	url := fmt.Sprintf("%s/v%s/terragrunt_linux_amd64", terragruntReleaseURL, tgi.version)
-	return [][]string{
-		{"mkdir", "-p", "/usr/local/bin"},
-		{"curl", "-L", "-o", "/usr/local/bin/terragrunt", url},
-		{"chmod", "+x", "/usr/local/bin/terragrunt"},
-		{"terragrunt", "--version"},
-	}
+	url := fmt.Sprintf("%s/v%s/terragrunt_linux_amd64", tgi.releaseURL, tgi.version)
+	return tgi.BaseInstaller.GetInstallCommands(url)
 }
 
 // Install performs the Terragrunt installation on a Dagger container.
 func (tgi *TerragruntInstaller) Install(container *dagger.Container) *dagger.Container {
-	commands := tgi.GetInstallCommands()
-	for _, cmd := range commands {
-		container = container.WithExec(cmd)
-	}
-	return container
+	return tgi.BaseInstaller.Install(container, tgi.GetInstallCommands())
 }
 
 // GetLatestVersion fetches the latest version for Terragrunt.

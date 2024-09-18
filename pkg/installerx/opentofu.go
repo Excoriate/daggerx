@@ -2,7 +2,6 @@ package installerx
 
 import (
 	"fmt"
-	"strings"
 
 	"dagger.io/dagger"
 )
