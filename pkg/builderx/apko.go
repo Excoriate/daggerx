@@ -219,21 +219,23 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 	return cmd, nil
 }
 
-// GetKeyringInfo returns the keyring information based on the preset.
+// GetKeyringInfoForPreset returns the keyring information based on the preset.
 // It takes a string parameter 'preset' which specifies the keyring preset ("alpine" or "wolfi").
-// It returns the key URL, key path, and an error if the preset is unsupported.
-func GetKeyringInfo(preset string) (keyURL, keyPath string, err error) {
+// It returns a KeyringInfo struct and an error if the preset is unsupported.
+func GetKeyringInfoForPreset(preset string) (KeyringInfo, error) {
 	switch preset {
 	case "alpine":
-		return "https://alpinelinux.org/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub",
-			"/etc/apk/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub",
-			nil
+		return KeyringInfo{
+			KeyURL:  "https://alpinelinux.org/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub",
+			KeyPath: "/etc/apk/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub",
+		}, nil
 	case "wolfi":
-		return "https://packages.wolfi.dev/os/wolfi-signing.rsa.pub",
-			"/etc/apk/keys/wolfi-signing.rsa.pub",
-			nil
+		return KeyringInfo{
+			KeyURL:  "https://packages.wolfi.dev/os/wolfi-signing.rsa.pub",
+			KeyPath: "/etc/apk/keys/wolfi-signing.rsa.pub",
+		}, nil
 	default:
-		return "", "", fmt.Errorf("unsupported preset: %s", preset)
+		return KeyringInfo{}, fmt.Errorf("unsupported preset: %s", preset)
 	}
 }
 
@@ -249,4 +251,32 @@ func GetCacheDir(mntPrefix string) string {
 // It returns the full path to the output tar file.
 func GetOutputTarPath(mntPrefix string) string {
 	return filepath.Join(mntPrefix, "image.tar")
+}
+
+// WithKeyRingWolfi adds the Wolfi keyring to the APKO build.
+// It appends the Wolfi signing key to the keyringPaths.
+// Returns the updated ApkoBuilder instance.
+func (b *ApkoBuilder) WithKeyRingWolfi() *ApkoBuilder {
+	wolfiKeyInfo, err := GetKeyringInfoForPreset("wolfi")
+	if err == nil {
+		b.keyringPaths = append(b.keyringPaths, wolfiKeyInfo.KeyPath)
+	}
+	return b
+}
+
+// WithKeyRingAlpine adds the Alpine keyring to the APKO build.
+// It appends the Alpine signing key to the keyringPaths.
+// Returns the updated ApkoBuilder instance.
+func (b *ApkoBuilder) WithKeyRingAlpine() *ApkoBuilder {
+	alpineKeyInfo, err := GetKeyringInfoForPreset("alpine")
+	if err == nil {
+		b.keyringPaths = append(b.keyringPaths, alpineKeyInfo.KeyPath)
+	}
+	return b
+}
+
+// KeyringInfo holds information about a keyring
+type KeyringInfo struct {
+	KeyURL  string
+	KeyPath string
 }

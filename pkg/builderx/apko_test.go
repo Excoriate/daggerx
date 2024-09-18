@@ -196,49 +196,48 @@ func TestApkoBuilder(t *testing.T) {
 	})
 }
 
-func TestGetKeyringInfo(t *testing.T) {
+func TestGetKeyringInfoForPreset(t *testing.T) {
 	testCases := []struct {
-		name          string
-		preset        string
-		expectedURL   string
-		expectedPath  string
-		expectedError bool
+		preset    string
+		expectErr bool
+		expected  KeyringInfo
 	}{
 		{
-			name:         "Alpine Preset",
-			preset:       "alpine",
-			expectedURL:  "https://alpinelinux.org/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub",
-			expectedPath: "/etc/apk/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub",
+			preset:    "alpine",
+			expectErr: false,
+			expected: KeyringInfo{
+				KeyURL:  "https://alpinelinux.org/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub",
+				KeyPath: "/etc/apk/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub",
+			},
 		},
 		{
-			name:         "Wolfi Preset",
-			preset:       "wolfi",
-			expectedURL:  "https://packages.wolfi.dev/os/wolfi-signing.rsa.pub",
-			expectedPath: "/etc/apk/keys/wolfi-signing.rsa.pub",
+			preset:    "wolfi",
+			expectErr: false,
+			expected: KeyringInfo{
+				KeyURL:  "https://packages.wolfi.dev/os/wolfi-signing.rsa.pub",
+				KeyPath: "/etc/apk/keys/wolfi-signing.rsa.pub",
+			},
 		},
 		{
-			name:          "Unsupported Preset",
-			preset:        "unsupported",
-			expectedError: true,
+			preset:    "unsupported",
+			expectErr: true,
 		},
 	}
 
 	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			url, path, err := GetKeyringInfo(tc.preset)
-			if tc.expectedError {
+		t.Run(tc.preset, func(t *testing.T) {
+			info, err := GetKeyringInfoForPreset(tc.preset)
+
+			if tc.expectErr {
 				if err == nil {
-					t.Error("Expected an error, but got nil")
+					t.Errorf("Expected error for preset %s, but got none", tc.preset)
 				}
 			} else {
 				if err != nil {
-					t.Errorf("Unexpected error: %v", err)
+					t.Errorf("Unexpected error for preset %s: %v", tc.preset, err)
 				}
-				if url != tc.expectedURL {
-					t.Errorf("Expected URL %s, got %s", tc.expectedURL, url)
-				}
-				if path != tc.expectedPath {
-					t.Errorf("Expected path %s, got %s", tc.expectedPath, path)
+				if info != tc.expected {
+					t.Errorf("Expected keyring info %+v, but got %+v", tc.expected, info)
 				}
 			}
 		})
@@ -260,5 +259,25 @@ func TestGetOutputTarPath(t *testing.T) {
 	result := GetOutputTarPath(mntPrefix)
 	if result != expected {
 		t.Errorf("Expected output tar path %s, got %s", expected, result)
+	}
+}
+
+func TestApkoBuilder_WithKeyRingWolfi(t *testing.T) {
+	builder := NewApkoBuilder()
+	builder.WithKeyRingWolfi()
+
+	expectedKeyPath := "/etc/apk/keys/wolfi-signing.rsa.pub"
+	if len(builder.keyringPaths) != 1 || builder.keyringPaths[0] != expectedKeyPath {
+		t.Errorf("Expected Wolfi keyring path %s, but got %v", expectedKeyPath, builder.keyringPaths)
+	}
+}
+
+func TestApkoBuilder_WithKeyRingAlpine(t *testing.T) {
+	builder := NewApkoBuilder()
+	builder.WithKeyRingAlpine()
+
+	expectedKeyPath := "/etc/apk/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub"
+	if len(builder.keyringPaths) != 1 || builder.keyringPaths[0] != expectedKeyPath {
+		t.Errorf("Expected Alpine keyring path %s, but got %v", expectedKeyPath, builder.keyringPaths)
 	}
 }
