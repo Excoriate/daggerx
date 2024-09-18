@@ -1,5 +1,4 @@
 // Package installerx provides functionality for installing various binaries and tools.
-
 package installerx
 
 import (
@@ -9,7 +8,8 @@ import (
 	"dagger.io/dagger"
 )
 
-// BaseInstaller implements the Installer interface
+// BaseInstaller implements the Installer interface and provides common functionality
+// for installing binaries across different platforms and package formats.
 type BaseInstaller struct {
 	version    string
 	releaseURL string
