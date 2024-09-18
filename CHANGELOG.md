@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.19](https://github.com/Excoriate/daggerx/compare/v0.0.18...v0.0.19) (2024-09-18)
+
+
+### Features
+
+* Improve keyring handling by refactoring GetKeyringInfo ([#53](https://github.com/Excoriate/daggerx/issues/53)) ([0345de2](https://github.com/Excoriate/daggerx/commit/0345de2240c63f1d48d5ab3b5ca69f0ea4f6dc6f))
+
 ## [0.0.18](https://github.com/Excoriate/daggerx/compare/v0.0.17...v0.0.18) (2024-09-18)
 
 
