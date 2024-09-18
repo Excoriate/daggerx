@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.20](https://github.com/Excoriate/daggerx/compare/v0.0.19...v0.0.20) (2024-09-18)
+
+
+### Features
+
+* Add support for setting tags in APKO builds ([#55](https://github.com/Excoriate/daggerx/issues/55)) ([8461d8b](https://github.com/Excoriate/daggerx/commit/8461d8b56e183de26473f898cba80b86a4b630a6))
+
 ## [0.0.19](https://github.com/Excoriate/daggerx/compare/v0.0.18...v0.0.19) (2024-09-18)
 
 
