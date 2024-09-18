@@ -361,11 +361,15 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 		cmd = append(cmd, "--timestamp", b.timestamp)
 	}
 
-	if len(b.tags) > 0 {
-		cmd = append(cmd, "--tag", b.tags[0])
+	// Move these lines here, before appending the config file and output image
+	if !b.sbom {
+		cmd = append(cmd, "--sbom=false")
 	}
 
-	// Add new flags
+	if !b.vcs {
+		cmd = append(cmd, "--vcs=false")
+	}
+
 	for k, v := range b.annotations {
 		cmd = append(cmd, "--annotations", fmt.Sprintf("%s:%s", k, v))
 	}
@@ -386,20 +390,12 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 		cmd = append(cmd, "--package-append", pkg)
 	}
 
-	if !b.sbom {
-		cmd = append(cmd, "--sbom=false")
-	}
-
 	if len(b.sbomFormats) > 0 {
 		cmd = append(cmd, "--sbom-formats", strings.Join(b.sbomFormats, ","))
 	}
 
 	if b.sbomPath != "" {
 		cmd = append(cmd, "--sbom-path", b.sbomPath)
-	}
-
-	if !b.vcs {
-		cmd = append(cmd, "--vcs=false")
 	}
 
 	if b.logLevel != "" {
@@ -414,12 +410,14 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 		cmd = append(cmd, "--workdir", b.workdir)
 	}
 
+	// Now append the config file and output image
 	cmd = append(cmd, b.configFile, b.outputImage)
 
 	if b.outputTarball != "" {
 		cmd = append(cmd, b.outputTarball)
 	}
 
+	// Append extra args at the end
 	cmd = append(cmd, b.extraArgs...)
 
 	return cmd, nil
