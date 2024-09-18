@@ -51,6 +51,5 @@ func TestTerragruntInstaller_GetLatestVersion(t *testing.T) {
 	version, err := installer.GetLatestVersion()
 	require.NoError(t, err)
 	assert.NotEmpty(t, version)
-	// Note: This test assumes that GetLatestVersion always returns "0.67.4" as per the current implementation
 	assert.Equal(t, "0.67.4", version)
 }

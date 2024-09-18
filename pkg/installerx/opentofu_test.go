@@ -53,6 +53,5 @@ func TestOpenTofuInstaller_GetLatestVersion(t *testing.T) {
 	version, err := installer.GetLatestVersion()
 	require.NoError(t, err)
 	assert.NotEmpty(t, version)
-	// Note: This test assumes that GetLatestVersion always returns "1.5.0" as per the current implementation
 	assert.Equal(t, "1.5.0", version)
 }
