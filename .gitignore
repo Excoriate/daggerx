@@ -40,3 +40,4 @@
 *.zip
 aider*
 .aider**
+AI/*.md
