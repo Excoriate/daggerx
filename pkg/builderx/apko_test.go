@@ -145,7 +145,8 @@ func TestApkoBuilder(t *testing.T) {
 			WithKeyringAppendPlaintext("/plaintext.key").
 			WithNoNetwork().
 			WithRepositoryAppend("https://example.com/repo").
-			WithTimestamp("2023-01-01T00:00:00Z")
+			WithTimestamp("2023-01-01T00:00:00Z").
+			WithTag("v1.0")
 
 		expected := []string{
 			"apko", "build",
@@ -163,6 +164,7 @@ func TestApkoBuilder(t *testing.T) {
 			"--no-network",
 			"--repository-append", "https://example.com/repo",
 			"--timestamp", "2023-01-01T00:00:00Z",
+			"--tag", "v1.0",
 			"config.yaml",
 			"my-image:latest",
 			"image.tar",
@@ -175,7 +177,7 @@ func TestApkoBuilder(t *testing.T) {
 		}
 
 		if !reflect.DeepEqual(cmd, expected) {
-			t.Errorf("BuildCommand did not return expected command. Got: %v, Want: %v", cmd, expected)
+			t.Errorf("BuildCommand did not return expected command.\nGot:  %v\nWant: %v", cmd, expected)
 		}
 	})
 
@@ -280,4 +282,20 @@ func TestApkoBuilder_WithKeyRingAlpine(t *testing.T) {
 	if len(builder.keyringPaths) != 1 || builder.keyringPaths[0] != expectedKeyPath {
 		t.Errorf("Expected Alpine keyring path %s, but got %v", expectedKeyPath, builder.keyringPaths)
 	}
+}
+
+func TestApkoBuilder_WithTag(t *testing.T) {
+	t.Run("WithSpecificTag", func(t *testing.T) {
+		builder := NewApkoBuilder().WithTag("v1.0")
+		if !reflect.DeepEqual(builder.tags, []string{"v1.0"}) {
+			t.Errorf("Tag not set correctly, got %v", builder.tags)
+		}
+	})
+
+	t.Run("WithDefaultTag", func(t *testing.T) {
+		builder := NewApkoBuilder().WithTag()
+		if !reflect.DeepEqual(builder.tags, []string{"latest"}) {
+			t.Errorf("Default tag not set correctly, got %v", builder.tags)
+		}
+	})
 }

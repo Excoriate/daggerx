@@ -23,6 +23,7 @@ type ApkoBuilder struct {
 	noNetwork              bool
 	repositoryAppend       []string
 	timestamp              string
+	tags                   []string
 }
 
 // NewApkoBuilder creates a new ApkoBuilder with default settings.
@@ -147,6 +148,18 @@ func (b *ApkoBuilder) WithTimestamp(timestamp string) *ApkoBuilder {
 	return b
 }
 
+// WithTag adds a tag to the APKO build.
+// If no tag is provided, it defaults to "latest".
+// It returns the updated ApkoBuilder instance.
+func (b *ApkoBuilder) WithTag(tag ...string) *ApkoBuilder {
+	if len(tag) > 0 {
+		b.tags = append(b.tags, tag[0])
+	} else {
+		b.tags = append(b.tags, "latest")
+	}
+	return b
+}
+
 // BuildCommand generates the APKO build command based on the current configuration of the ApkoBuilder.
 // It returns a slice of strings representing the command and an error if any required fields are missing.
 func (b *ApkoBuilder) BuildCommand() ([]string, error) {
@@ -206,6 +219,10 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 
 	if b.timestamp != "" {
 		cmd = append(cmd, "--timestamp", b.timestamp)
+	}
+
+	if len(b.tags) > 0 {
+		cmd = append(cmd, "--tag", b.tags[0])
 	}
 
 	cmd = append(cmd, b.configFile, b.outputImage)
