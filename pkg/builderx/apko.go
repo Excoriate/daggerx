@@ -3,6 +3,8 @@ package builderx
 import (
 	"fmt"
 	"path/filepath"
+
+	"github.com/Excoriate/daggerx/pkg/fixtures"
 )
 
 // ApkoBuilder represents a builder for APKO commands
@@ -260,6 +262,10 @@ func GetKeyringInfoForPreset(preset string) (KeyringInfo, error) {
 // It takes a string parameter 'mntPrefix' which is the mount prefix.
 // It returns the full path to the cache directory.
 func GetCacheDir(mntPrefix string) string {
+	if mntPrefix == "" {
+		mntPrefix = fixtures.MntPrefix
+	}
+
 	return filepath.Join(mntPrefix, "var", "cache", "apko")
 }
 

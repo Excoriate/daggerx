@@ -3,6 +3,8 @@ package builderx
 import (
 	"reflect"
 	"testing"
+
+	"github.com/Excoriate/daggerx/pkg/fixtures"
 )
 
 func TestApkoBuilder(t *testing.T) {
@@ -247,12 +249,23 @@ func TestGetKeyringInfoForPreset(t *testing.T) {
 }
 
 func TestGetCacheDir(t *testing.T) {
-	mntPrefix := "/mnt"
-	expected := "/mnt/var/cache/apko"
-	result := GetCacheDir(mntPrefix)
-	if result != expected {
-		t.Errorf("Expected cache dir %s, got %s", expected, result)
-	}
+	t.Run("WithCustomMntPrefix", func(t *testing.T) {
+		mntPrefix := "/mnt"
+		expected := "/mnt/var/cache/apko"
+		result := GetCacheDir(mntPrefix)
+		if result != expected {
+			t.Errorf("Expected cache dir %s, got %s", expected, result)
+		}
+	})
+
+	t.Run("WithEmptyMntPrefix", func(t *testing.T) {
+		mntPrefix := ""
+		expected := fixtures.MntPrefix + "/var/cache/apko"
+		result := GetCacheDir(mntPrefix)
+		if result != expected {
+			t.Errorf("Expected cache dir %s, got %s", expected, result)
+		}
+	})
 }
 
 func TestGetOutputTarPath(t *testing.T) {
