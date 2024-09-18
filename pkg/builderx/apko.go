@@ -24,6 +24,10 @@ const (
 	ArchS390x Architecture = "s390x"
 	// ApkoDefaultRepositoryURL is the default repository URL for APKO builds
 	ApkoDefaultRepositoryURL = "cgr.dev/chainguard/apko"
+	// ApkoWolfiSigninRsaKeyPath is the path to the Wolfi signing RSA public key used for package verification.
+	ApkoWolfiSigninRsaKeyPath = "/etc/apk/keys/wolfi-signing.rsa.pub"
+	// ApkoAlpineSigninRsaKeyPath is the path to the Alpine signing RSA public key used for package verification.
+	ApkoAlpineSigninRsaKeyPath = "/etc/apk/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub"
 )
 
 // ApkoBuilder represents a builder for APKO (Alpine Package Keeper for OCI) images.
@@ -318,11 +322,11 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 	}
 
 	if b.wolfiKeyring {
-		cmd = append(cmd, "--keyring-append", "/etc/apk/keys/wolfi-signing.rsa.pub")
+		cmd = append(cmd, "--keyring-append", ApkoWolfiSigninRsaKeyPath)
 	}
 
 	if b.alpineKeyring {
-		cmd = append(cmd, "--keyring-append", "/etc/apk/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub")
+		cmd = append(cmd, "--keyring-append", ApkoAlpineSigninRsaKeyPath)
 	}
 
 	if b.cacheDir != "" {
