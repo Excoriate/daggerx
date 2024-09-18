@@ -281,3 +281,70 @@ func TestApkoBuilder_WithKeyRingAlpine(t *testing.T) {
 		t.Errorf("Expected Alpine keyring path %s, but got %v", expectedKeyPath, builder.keyringPaths)
 	}
 }
+
+// TestGetApkoConfigOrPreset tests the GetApkoConfigOrPreset function
+func TestGetApkoConfigOrPreset(t *testing.T) {
+	tests := []struct {
+		name      string
+		mntPrefix string
+		cfgFile   string
+		want      string
+		wantErr   bool
+	}{
+		{
+			name:      "Valid config file with .yaml extension",
+			mntPrefix: "/mnt",
+			cfgFile:   "config.yaml",
+			want:      "config.yaml",
+			wantErr:   false,
+		},
+		{
+			name:      "Valid config file with .yml extension",
+			mntPrefix: "/mnt",
+			cfgFile:   "config.yml",
+			want:      "config.yml",
+			wantErr:   false,
+		},
+		{
+			name:      "Empty mntPrefix",
+			mntPrefix: "",
+			cfgFile:   "config.yaml",
+			want:      "config.yaml",
+			wantErr:   false,
+		},
+		{
+			name:      "Empty config file",
+			mntPrefix: "/mnt",
+			cfgFile:   "",
+			want:      "",
+			wantErr:   true,
+		},
+		{
+			name:      "Config file without extension",
+			mntPrefix: "/mnt",
+			cfgFile:   "config",
+			want:      "",
+			wantErr:   true,
+		},
+		{
+			name:      "Config file with invalid extension",
+			mntPrefix: "/mnt",
+			cfgFile:   "config.txt",
+			want:      "",
+			wantErr:   true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := GetApkoConfigOrPreset(tt.mntPrefix, tt.cfgFile)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetApkoConfigOrPreset() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("GetApkoConfigOrPreset() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

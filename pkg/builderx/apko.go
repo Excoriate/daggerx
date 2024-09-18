@@ -3,26 +3,89 @@ package builderx
 import (
 	"fmt"
 	"path/filepath"
+
+	"github.com/Excoriate/daggerx/pkg/fixtures"
 )
 
-// ApkoBuilder represents a builder for APKO commands
+// Architecture represents supported CPU architectures for APKO builds
+type Architecture string
+
+const (
+	// ArchX8664 represents the x86_64 architecture
+	ArchX8664 Architecture = "x86_64"
+	// ArchAarch64 represents the aarch64 architecture
+	ArchAarch64 Architecture = "aarch64"
+	// ArchArmv7 represents the armv7 architecture
+	ArchArmv7 Architecture = "armv7"
+	// ArchPpc64le represents the ppc64le architecture
+	ArchPpc64le Architecture = "ppc64le"
+	// ArchS390x represents the s390x architecture
+	ArchS390x Architecture = "s390x"
+	// ApkoDefaultRepositoryURL is the default repository URL for APKO builds
+	ApkoDefaultRepositoryURL = "cgr.dev/chainguard/apko"
+)
+
+// ApkoBuilder represents a builder for APKO (Alpine Package Keeper for OCI) images.
+// It encapsulates all the configuration options and settings needed to build an APKO image.
 type ApkoBuilder struct {
-	configFile             string
-	outputImage            string
-	outputTarball          string
-	keyringPaths           []string
-	architectures          []string
-	cacheDir               string
-	extraArgs              []string
-	wolfiKeyring           bool
-	alpineKeyring          bool
-	buildArch              string
-	buildContext           string
-	debug                  bool
+	// configFile is the path to the APKO configuration file.
+	configFile string
+
+	// outputImage is the name of the output OCI image.
+	outputImage string
+
+	// outputTarball is the path where the output tarball will be saved.
+	outputTarball string
+
+	// keyringPaths is a slice of paths to keyring files used for package verification.
+	keyringPaths []string
+
+	// architectures is a slice of target architectures for the build.
+	architectures []string
+
+	// cacheDir is the directory used for caching build artifacts.
+	cacheDir string
+
+	// extraArgs is a slice of additional arguments to pass to the APKO build command.
+	extraArgs []string
+
+	// wolfiKeyring indicates whether to use the Wolfi keyring.
+	wolfiKeyring bool
+
+	// alpineKeyring indicates whether to use the Alpine keyring.
+	alpineKeyring bool
+
+	// buildArch specifies the architecture to build for.
+	buildArch string
+
+	// buildContext is the build context directory.
+	buildContext string
+
+	// debug enables debug mode for verbose output.
+	debug bool
+
+	// keyringAppendPlaintext is a slice of plaintext keys to append to the keyring.
 	keyringAppendPlaintext []string
-	noNetwork              bool
-	repositoryAppend       []string
-	timestamp              string
+
+	// noNetwork disables network access during the build.
+	noNetwork bool
+
+	// repositoryAppend is a slice of additional repositories to append.
+	repositoryAppend []string
+
+	// timestamp sets a specific timestamp for reproducible builds.
+	timestamp string
+
+	// tags is a slice of additional tags for the output image.
+	tags []string
+}
+
+// WithBuildArch sets the build architecture for the APKO build.
+// It takes an Architecture parameter 'arch' which is the desired build architecture.
+// It returns the updated ApkoBuilder instance.
+func (b *ApkoBuilder) WithBuildArch(arch Architecture) *ApkoBuilder {
+	b.buildArch = string(arch)
+	return b
 }
 
 // NewApkoBuilder creates a new ApkoBuilder with default settings.
@@ -105,12 +168,6 @@ func (b *ApkoBuilder) WithExtraArg(arg string) *ApkoBuilder {
 	return b
 }
 
-// WithBuildArch sets the build architecture
-func (b *ApkoBuilder) WithBuildArch(arch string) *ApkoBuilder {
-	b.buildArch = arch
-	return b
-}
-
 // WithBuildContext sets the build context directory
 func (b *ApkoBuilder) WithBuildContext(dir string) *ApkoBuilder {
 	b.buildContext = dir
@@ -144,6 +201,18 @@ func (b *ApkoBuilder) WithRepositoryAppend(repo string) *ApkoBuilder {
 // WithTimestamp sets the timestamp for the build
 func (b *ApkoBuilder) WithTimestamp(timestamp string) *ApkoBuilder {
 	b.timestamp = timestamp
+	return b
+}
+
+// WithTag adds a tag to the APKO build.
+// If no tag is provided, it defaults to "latest".
+// It returns the updated ApkoBuilder instance.
+func (b *ApkoBuilder) WithTag(tag ...string) *ApkoBuilder {
+	if len(tag) > 0 {
+		b.tags = append(b.tags, tag[0])
+	} else {
+		b.tags = append(b.tags, "latest")
+	}
 	return b
 }
 
@@ -208,6 +277,10 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 		cmd = append(cmd, "--timestamp", b.timestamp)
 	}
 
+	if len(b.tags) > 0 {
+		cmd = append(cmd, "--tag", b.tags[0])
+	}
+
 	cmd = append(cmd, b.configFile, b.outputImage)
 
 	if b.outputTarball != "" {
@@ -243,7 +316,40 @@ func GetKeyringInfoForPreset(preset string) (KeyringInfo, error) {
 // It takes a string parameter 'mntPrefix' which is the mount prefix.
 // It returns the full path to the cache directory.
 func GetCacheDir(mntPrefix string) string {
+	if mntPrefix == "" {
+		mntPrefix = fixtures.MntPrefix
+	}
+
 	return filepath.Join(mntPrefix, "var", "cache", "apko")
+}
+
+// GetApkoConfigOrPreset returns the configuration file path if it is valid.
+// It takes two string parameters: 'mntPrefix' which is the mount prefix, and 'cfgFile' which is the configuration file path.
+// If 'mntPrefix' is empty, it defaults to fixtures.MntPrefix.
+// If 'cfgFile' is empty, it returns an error indicating that the config file is required.
+// If 'cfgFile' does not have an extension, it returns an error indicating that the config file must have an extension.
+// If 'cfgFile' does not have a .yaml or .yml extension, it returns an error indicating that the config file must have a .yaml or .yml extension.
+// It returns the configuration file path if all checks pass, otherwise it returns an error.
+func GetApkoConfigOrPreset(mntPrefix, cfgFile string) (string, error) {
+	if mntPrefix == "" {
+		mntPrefix = fixtures.MntPrefix
+	}
+
+	if cfgFile == "" {
+		return "", fmt.Errorf("config file is required")
+	}
+
+	ext := filepath.Ext(cfgFile)
+	if ext == "" {
+		return "", fmt.Errorf("config file must have an extension")
+	}
+
+	// Check if the file extension is .yaml or .yml
+	if ext != ".yaml" && ext != ".yml" {
+		return "", fmt.Errorf("config file must have a .yaml or .yml extension")
+	}
+
+	return cfgFile, nil
 }
 
 // GetOutputTarPath returns the APKO output tar file path.
