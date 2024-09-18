@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.0.17](https://github.com/Excoriate/daggerx/compare/v0.0.16...v0.0.17) (2024-09-18)
+
+
+### Features
+
+* Convert TaskFile.yml to Justfile for task automation ([#43](https://github.com/Excoriate/daggerx/issues/43)) ([a868eb2](https://github.com/Excoriate/daggerx/commit/a868eb27c65913f211c9f62d95b22a791c0f1b06))
+* Extend ApkoBuilder with additional configuration options ([#48](https://github.com/Excoriate/daggerx/issues/48)) ([bbda6e0](https://github.com/Excoriate/daggerx/commit/bbda6e0ba929d717b04606953e6d559290115248))
+* Improve container image handling ([#47](https://github.com/Excoriate/daggerx/issues/47)) ([895e93d](https://github.com/Excoriate/daggerx/commit/895e93d34eaf38bfb1f75fe52c4469951eef73a3))
+* Improve dependency management ([#44](https://github.com/Excoriate/daggerx/issues/44)) ([ac2ce33](https://github.com/Excoriate/daggerx/commit/ac2ce33677d128ee70d2fcd6e7b9b6a449e27b9a))
+
+
+### Docs
+
+* Update contributing guide in README.md ([#46](https://github.com/Excoriate/daggerx/issues/46)) ([a0d8e58](https://github.com/Excoriate/daggerx/commit/a0d8e5887128d4d72806216a16c082157e753015))
+
 ## [0.0.16](https://github.com/Excoriate/daggerx/compare/v0.0.15...v0.0.16) (2024-06-02)
 
 
