@@ -11,9 +11,6 @@ func TestApkoBuilder(t *testing.T) {
 		if builder == nil {
 			t.Fatal("NewApkoBuilder returned nil")
 		}
-		if !reflect.DeepEqual(builder.architectures, []string{"x86_64", "aarch64"}) {
-			t.Errorf("Default architectures not set correctly, got %v", builder.architectures)
-		}
 	})
 
 	t.Run("WithConfigFile", func(t *testing.T) {
@@ -60,8 +57,8 @@ func TestApkoBuilder(t *testing.T) {
 
 	t.Run("WithArchitecture", func(t *testing.T) {
 		builder := NewApkoBuilder().WithArchitecture("arm64")
-		if !reflect.DeepEqual(builder.architectures, []string{"x86_64", "aarch64", "arm64"}) {
-			t.Errorf("Architecture not added correctly, got %v", builder.architectures)
+		if builder.buildArch != "arm64" {
+			t.Errorf("Architecture not set correctly, got %v, want %v", builder.buildArch, "arm64")
 		}
 	})
 
@@ -128,6 +125,90 @@ func TestApkoBuilder(t *testing.T) {
 		}
 	})
 
+	t.Run("WithAnnotations", func(t *testing.T) {
+		builder := NewApkoBuilder().WithAnnotations(map[string]string{"key": "value"})
+		if !reflect.DeepEqual(builder.annotations, map[string]string{"key": "value"}) {
+			t.Errorf("Annotations not set correctly, got %v", builder.annotations)
+		}
+	})
+
+	t.Run("WithBuildDate", func(t *testing.T) {
+		builder := NewApkoBuilder().WithBuildDate("2023-01-01T00:00:00Z")
+		if builder.buildDate != "2023-01-01T00:00:00Z" {
+			t.Errorf("Build date not set correctly, got %s", builder.buildDate)
+		}
+	})
+
+	t.Run("WithLockfile", func(t *testing.T) {
+		builder := NewApkoBuilder().WithLockfile("/path/to/lockfile.json")
+		if builder.lockfile != "/path/to/lockfile.json" {
+			t.Errorf("Lockfile not set correctly, got %s", builder.lockfile)
+		}
+	})
+
+	t.Run("WithOffline", func(t *testing.T) {
+		builder := NewApkoBuilder().WithOffline()
+		if !builder.offline {
+			t.Error("Offline mode not enabled")
+		}
+	})
+
+	t.Run("WithPackageAppend", func(t *testing.T) {
+		builder := NewApkoBuilder().WithPackageAppend("pkg1", "pkg2")
+		if !reflect.DeepEqual(builder.packageAppend, []string{"pkg1", "pkg2"}) {
+			t.Errorf("Package append not set correctly, got %v", builder.packageAppend)
+		}
+	})
+
+	t.Run("WithSBOM", func(t *testing.T) {
+		builder := NewApkoBuilder().WithSBOM(false)
+		if builder.sbom {
+			t.Error("SBOM generation not disabled")
+		}
+	})
+
+	t.Run("WithSBOMFormats", func(t *testing.T) {
+		builder := NewApkoBuilder().WithSBOMFormats("spdx", "cyclonedx")
+		if !reflect.DeepEqual(builder.sbomFormats, []string{"spdx", "cyclonedx"}) {
+			t.Errorf("SBOM formats not set correctly, got %v", builder.sbomFormats)
+		}
+	})
+
+	t.Run("WithSBOMPath", func(t *testing.T) {
+		builder := NewApkoBuilder().WithSBOMPath("/path/to/sbom")
+		if builder.sbomPath != "/path/to/sbom" {
+			t.Errorf("SBOM path not set correctly, got %s", builder.sbomPath)
+		}
+	})
+
+	t.Run("WithVCS", func(t *testing.T) {
+		builder := NewApkoBuilder().WithVCS(false)
+		if builder.vcs {
+			t.Error("VCS detection not disabled")
+		}
+	})
+
+	t.Run("WithLogLevel", func(t *testing.T) {
+		builder := NewApkoBuilder().WithLogLevel("debug")
+		if builder.logLevel != "debug" {
+			t.Errorf("Log level not set correctly, got %s", builder.logLevel)
+		}
+	})
+
+	t.Run("WithLogPolicy", func(t *testing.T) {
+		builder := NewApkoBuilder().WithLogPolicy("builtin:stderr", "/tmp/log/foo")
+		if !reflect.DeepEqual(builder.logPolicy, []string{"builtin:stderr", "/tmp/log/foo"}) {
+			t.Errorf("Log policy not set correctly, got %v", builder.logPolicy)
+		}
+	})
+
+	t.Run("WithWorkdir", func(t *testing.T) {
+		builder := NewApkoBuilder().WithWorkdir("/path/to/workdir")
+		if builder.workdir != "/path/to/workdir" {
+			t.Errorf("Workdir not set correctly, got %s", builder.workdir)
+		}
+	})
+
 	t.Run("BuildCommand", func(t *testing.T) {
 		builder := NewApkoBuilder().
 			WithConfigFile("config.yaml").
@@ -136,7 +217,6 @@ func TestApkoBuilder(t *testing.T) {
 			WithKeyring("/custom/keyring.pub").
 			WithWolfiKeyring().
 			WithAlpineKeyring().
-			WithArchitecture("arm64").
 			WithCacheDir("/tmp/cache").
 			WithExtraArg("--custom-arg").
 			WithBuildArch("amd64").
@@ -145,24 +225,47 @@ func TestApkoBuilder(t *testing.T) {
 			WithKeyringAppendPlaintext("/plaintext.key").
 			WithNoNetwork().
 			WithRepositoryAppend("https://example.com/repo").
-			WithTimestamp("2023-01-01T00:00:00Z")
+			WithTimestamp("2023-01-01T00:00:00Z").
+			WithAnnotations(map[string]string{"key": "value"}).
+			WithBuildDate("2023-01-01T00:00:00Z").
+			WithLockfile("/path/to/lockfile.json").
+			WithOffline().
+			WithPackageAppend("pkg1", "pkg2").
+			WithSBOM(false).
+			WithSBOMFormats("spdx", "cyclonedx").
+			WithSBOMPath("/path/to/sbom").
+			WithVCS(false).
+			WithLogLevel("debug").
+			WithLogPolicy("builtin:stderr", "/tmp/log/foo").
+			WithWorkdir("/path/to/workdir")
 
 		expected := []string{
 			"apko", "build",
 			"--keyring-append", "/custom/keyring.pub",
 			"--keyring-append", "/etc/apk/keys/wolfi-signing.rsa.pub",
 			"--keyring-append", "/etc/apk/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub",
-			"--arch", "x86_64",
-			"--arch", "aarch64",
-			"--arch", "arm64",
 			"--cache-dir", "/tmp/cache",
-			"--build-arch", "amd64",
+			"--arch", "amd64",
 			"--build-context", "/build/context",
 			"--debug",
 			"--keyring-append-plaintext", "/plaintext.key",
 			"--no-network",
 			"--repository-append", "https://example.com/repo",
 			"--timestamp", "2023-01-01T00:00:00Z",
+			"--annotations", "key:value",
+			"--build-date", "2023-01-01T00:00:00Z",
+			"--lockfile", "/path/to/lockfile.json",
+			"--offline",
+			"--package-append", "pkg1",
+			"--package-append", "pkg2",
+			"--sbom=false",
+			"--sbom-formats", "spdx,cyclonedx",
+			"--sbom-path", "/path/to/sbom",
+			"--vcs=false",
+			"--log-level", "debug",
+			"--log-policy", "builtin:stderr",
+			"--log-policy", "/tmp/log/foo",
+			"--workdir", "/path/to/workdir",
 			"config.yaml",
 			"my-image:latest",
 			"image.tar",
