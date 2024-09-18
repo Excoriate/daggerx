@@ -38,3 +38,5 @@
 .terraform/
 .DS_Store
 *.zip
+aider*
+.aider**
