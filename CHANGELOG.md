@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.22](https://github.com/Excoriate/daggerx/compare/v0.0.21...v0.0.22) (2024-09-18)
+
+
+### Features
+
+* Improve the ApkoBuilder configuration and build command ([#60](https://github.com/Excoriate/daggerx/issues/60)) ([6238003](https://github.com/Excoriate/daggerx/commit/62380033104a9f66d25478ef7da54471d8a95fdc))
+
 ## [0.0.21](https://github.com/Excoriate/daggerx/compare/v0.0.20...v0.0.21) (2024-09-18)
 
 
