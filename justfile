@@ -50,9 +50,9 @@ go-vet:
     go vet ./...
 
 # 🚨 Lint Go code
-go-lint:
-    @echo "🚨 Linting all Go code using golangci-lint..."
-    golangci-lint run
+go-lint *ARGS:
+    @echo "🚨 Linting Go code using golangci-lint..."
+    golangci-lint run {{ARGS}}
 
 # 🧪 Run Go tests
 go-test:
