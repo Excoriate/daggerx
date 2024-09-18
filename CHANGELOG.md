@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.18](https://github.com/Excoriate/daggerx/compare/v0.0.17...v0.0.18) (2024-09-18)
+
+
+### Features
+
+* Add unit tests for Terraform, OpenTofu, and Terragrunt installers ([#49](https://github.com/Excoriate/daggerx/issues/49)) ([304f6b4](https://github.com/Excoriate/daggerx/commit/304f6b439b4f0cb4cd57492d62d9b7bc0391e734))
+* Update dependencies to latest versions ([#51](https://github.com/Excoriate/daggerx/issues/51)) ([aaf6c22](https://github.com/Excoriate/daggerx/commit/aaf6c22cdce8e6a8b743256184a81ba5c30faa5a))
+
 ## [0.0.17](https://github.com/Excoriate/daggerx/compare/v0.0.16...v0.0.17) (2024-09-18)
 
 
