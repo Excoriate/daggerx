@@ -1,3 +1,5 @@
+// Package installerx provides functionality for installing various binaries and tools.
+
 package installerx
 
 import (
