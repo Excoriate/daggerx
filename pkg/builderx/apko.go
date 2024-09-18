@@ -21,6 +21,8 @@ const (
 	ArchPpc64le Architecture = "ppc64le"
 	// ArchS390x represents the s390x architecture
 	ArchS390x Architecture = "s390x"
+	// ApkoDefaultRepositoryURL is the default repository URL for APKO builds
+	ApkoDefaultRepositoryURL = "cgr.dev/chainguard/apko"
 )
 
 // WithBuildArch sets the build architecture for the APKO build.
