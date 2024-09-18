@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.21](https://github.com/Excoriate/daggerx/compare/v0.0.20...v0.0.21) (2024-09-18)
+
+
+### Features
+
+* Add new flags to ApkoBuilder ([#57](https://github.com/Excoriate/daggerx/issues/57)) ([a32477c](https://github.com/Excoriate/daggerx/commit/a32477ce8eba5d691497ab37cc433f340f6e29f8))
+
 ## [0.0.20](https://github.com/Excoriate/daggerx/compare/v0.0.19...v0.0.20) (2024-09-18)
 
 
