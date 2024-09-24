@@ -315,7 +315,13 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 		return nil, fmt.Errorf("output image name is required")
 	}
 
-	cmd := []string{"apko", "build"}
+	// Start with the base command and the three required arguments
+	cmd := []string{"apko", "build", b.configFile, b.outputImage, "image.tar"}
+
+	// Add optional arguments
+	if b.cacheDir != "" {
+		cmd = append(cmd, "--cache-dir", b.cacheDir)
+	}
 
 	for _, keyring := range b.keyringPaths {
 		cmd = append(cmd, "--keyring-append", keyring)
@@ -327,10 +333,6 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 
 	if b.alpineKeyring {
 		cmd = append(cmd, "--keyring-append", ApkoAlpineSigninRsaKeyPath)
-	}
-
-	if b.cacheDir != "" {
-		cmd = append(cmd, "--cache-dir", b.cacheDir)
 	}
 
 	if b.buildArch != "" {
@@ -361,7 +363,6 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 		cmd = append(cmd, "--timestamp", b.timestamp)
 	}
 
-	// Move these lines here, before appending the config file and output image
 	if !b.sbom {
 		cmd = append(cmd, "--sbom=false")
 	}
@@ -408,13 +409,6 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 
 	if b.workdir != "" {
 		cmd = append(cmd, "--workdir", b.workdir)
-	}
-
-	// Now append the config file and output image
-	cmd = append(cmd, b.configFile, b.outputImage)
-
-	if b.outputTarball != "" {
-		cmd = append(cmd, b.outputTarball)
 	}
 
 	// Append extra args at the end
