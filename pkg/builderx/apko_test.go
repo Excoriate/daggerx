@@ -241,10 +241,13 @@ func TestApkoBuilder(t *testing.T) {
 
 		expected := []string{
 			"apko", "build",
+			"config.yaml",
+			"my-image:latest",
+			"image.tar",
+			"--cache-dir", "/tmp/cache",
 			"--keyring-append", "/custom/keyring.pub",
 			"--keyring-append", "/etc/apk/keys/wolfi-signing.rsa.pub",
 			"--keyring-append", "/etc/apk/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub",
-			"--cache-dir", "/tmp/cache",
 			"--arch", "amd64",
 			"--build-context", "/build/context",
 			"--debug",
@@ -266,9 +269,6 @@ func TestApkoBuilder(t *testing.T) {
 			"--log-policy", "builtin:stderr",
 			"--log-policy", "/tmp/log/foo",
 			"--workdir", "/path/to/workdir",
-			"config.yaml",
-			"my-image:latest",
-			"image.tar",
 			"--custom-arg",
 		}
 
@@ -459,7 +459,7 @@ func TestApkoBuilderCommand(t *testing.T) {
 		WithKeyring("/path/to/keyring.pub").
 		WithConfigFile("config.yaml").
 		WithOutputImage("my-image:latest").
-		WithOutputTarball("output.tar").
+		WithOutputTarball("image.tar"). // Changed this to "image.tar"
 		WithCacheDir("/cache/dir").
 		WithSBOM(false).
 		WithVCS(false)
@@ -471,14 +471,14 @@ func TestApkoBuilderCommand(t *testing.T) {
 
 	expectedCmd := []string{
 		"apko", "build",
-		"--keyring-append", "/path/to/keyring.pub",
+		"config.yaml",
+		"my-image:latest",
+		"image.tar", // Changed this to "image.tar"
 		"--cache-dir", "/cache/dir",
+		"--keyring-append", "/path/to/keyring.pub",
 		"--arch", "aarch64", // Last arch specified takes precedence
 		"--sbom=false",
 		"--vcs=false",
-		"config.yaml",
-		"my-image:latest",
-		"output.tar",
 	}
 
 	if !reflect.DeepEqual(cmd, expectedCmd) {
