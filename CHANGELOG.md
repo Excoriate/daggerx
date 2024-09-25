@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.28](https://github.com/Excoriate/daggerx/compare/v0.0.27...v0.0.28) (2024-09-25)
+
+
+### Features
+
+* Improve installation commands for OpenTofu and Terragrunt ([#72](https://github.com/Excoriate/daggerx/issues/72)) ([ebebdce](https://github.com/Excoriate/daggerx/commit/ebebdcecd17648a9bfbcaddb4d631069608ecc4d))
+
 ## [0.0.27](https://github.com/Excoriate/daggerx/compare/v0.0.26...v0.0.27) (2024-09-25)
 
 
