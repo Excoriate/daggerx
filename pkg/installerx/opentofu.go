@@ -4,49 +4,31 @@ import (
 	"fmt"
 )
 
-// openTofuReleaseURL is the base URL for OpenTofu releases on GitHub.
-const openTofuReleaseURL = "https://github.com/opentofu/opentofu/releases/download"
-
-// OpenTofuInstaller represents an installer for OpenTofu.
-// It embeds BaseInstaller to inherit common installation functionality.
-type OpenTofuInstaller struct {
-	*BaseInstaller
-}
-
-// NewOpenTofuInstaller creates and returns a new OpenTofuInstaller instance.
-// It initializes the embedded BaseInstaller with OpenTofu-specific parameters.
+// GetOpenTofuInstallCommand returns a slice of strings representing the command
+// to install OpenTofu of a specific version.
 //
 // Parameters:
-//   - version: The version of OpenTofu to install.
+// - version: The version of OpenTofu to install (e.g., "1.6.0")
+// - entryPoint: Optional entry point for the command. If empty, defaults to "sh -c"
 //
 // Returns:
-//   - *OpenTofuInstaller: A pointer to the newly created OpenTofuInstaller.
-func NewOpenTofuInstaller(version string) *OpenTofuInstaller {
-	return &OpenTofuInstaller{
-		BaseInstaller: NewBaseInstaller(version, openTofuReleaseURL, "tofu", "zip", "$HOME/bin"),
+// - A slice of strings representing the installation command
+func GetOpenTofuInstallCommand(version string, entryPoint string) []string {
+	if entryPoint == "" {
+		entryPoint = "sh -c"
 	}
-}
 
-// GetInstallCommands returns a slice of command slices needed to install OpenTofu.
-// It generates the download URL for the specific version and architecture,
-// then delegates to the BaseInstaller to generate the actual install commands.
-//
-// Returns:
-//   - [][]string: A slice of command slices, where each inner slice represents
-//     a command with its arguments.
-func (oti *OpenTofuInstaller) GetInstallCommands() [][]string {
-	url := fmt.Sprintf("%s/v%s/tofu_%s_linux_amd64.zip", oti.releaseURL, oti.version, oti.version)
-	return oti.BaseInstaller.GetInstallCommands(url)
-}
+	command := fmt.Sprintf(`
+set -ex
+echo "Downloading OpenTofu..."
+curl -L https://github.com/opentofu/opentofu/releases/download/v%[1]s/tofu_%[1]s_linux_amd64.zip -o /tmp/opentofu.zip
+unzip /tmp/opentofu.zip -d /usr/local/bin
+mv /usr/local/bin/tofu /usr/local/bin/opentofu
+chmod +x /usr/local/bin/opentofu
+rm /tmp/opentofu.zip
+echo "OpenTofu installation completed successfully"
+opentofu version
+`, version)
 
-// GetLatestVersion retrieves the latest version of OpenTofu available.
-//
-// Returns:
-//   - string: The latest version number.
-//   - error: An error if the version retrieval fails.
-//
-// Note: This is currently a placeholder implementation.
-func (oti *OpenTofuInstaller) GetLatestVersion() (string, error) {
-	// TODO: Implement logic to fetch the latest version from OpenTofu's releases page or API
-	return "1.5.0", nil
+	return []string{entryPoint, command}
 }

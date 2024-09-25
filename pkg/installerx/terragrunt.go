@@ -1,51 +1,28 @@
-// Package installerx provides functionality for installing various tools, including Terragrunt.
 package installerx
 
 import (
 	"fmt"
 )
 
-// terragruntReleaseURL is the base URL for downloading Terragrunt releases.
-const terragruntReleaseURL = "https://github.com/gruntwork-io/terragrunt/releases/download"
-
-// TerragruntInstaller represents an installer for Terragrunt.
-// It embeds BaseInstaller to inherit common installation functionality.
-type TerragruntInstaller struct {
-	*BaseInstaller
-}
-
-// NewTerragruntInstaller creates and returns a new TerragruntInstaller.
-// It initializes the embedded BaseInstaller with Terragrunt-specific parameters.
+// GetTerragruntInstallCommand returns a slice of strings representing the command
+// to install Terragrunt of a specific version.
 //
 // Parameters:
-//   - version: The version of Terragrunt to install.
+// - version: The version of Terragrunt to install (e.g., "0.38.0")
+// - entryPoint: Optional entry point for the command. If empty, defaults to "sh -c"
 //
 // Returns:
-//   - *TerragruntInstaller: A pointer to the newly created TerragruntInstaller.
-func NewTerragruntInstaller(version string) *TerragruntInstaller {
-	return &TerragruntInstaller{
-		BaseInstaller: NewBaseInstaller(version, terragruntReleaseURL, "terragrunt", "", "$HOME/bin"),
+// - A slice of strings representing the installation command
+func GetTerragruntInstallCommand(version string, entryPoint string) []string {
+	if entryPoint == "" {
+		entryPoint = "sh -c"
 	}
-}
 
-// GetInstallCommands returns the commands needed to install Terragrunt.
-// It generates the download URL for the specified version and delegates to BaseInstaller.
-//
-// Returns:
-//   - [][]string: A slice of command arguments, where each inner slice represents a single command.
-func (tgi *TerragruntInstaller) GetInstallCommands() [][]string {
-	url := fmt.Sprintf("%s/v%s/terragrunt_linux_amd64", tgi.releaseURL, tgi.version)
-	return tgi.BaseInstaller.GetInstallCommands(url)
-}
+	command := fmt.Sprintf(`
+set -ex
+curl -L https://github.com/gruntwork-io/terragrunt/releases/download/v%[1]s/terragrunt_linux_amd64 -o /usr/local/bin/terragrunt
+chmod +x /usr/local/bin/terragrunt
+`, version)
 
-// GetLatestVersion retrieves the latest version of Terragrunt available.
-//
-// Returns:
-//   - string: The latest version of Terragrunt.
-//   - error: An error if the version retrieval fails.
-//
-// Note: This is currently a placeholder implementation.
-func (tgi *TerragruntInstaller) GetLatestVersion() (string, error) {
-	// TODO: Implement logic to fetch the latest version from Terragrunt's releases page or API
-	return "0.67.4", nil
+	return []string{entryPoint, command}
 }
