@@ -23,7 +23,7 @@ type OpenTofuInstaller struct {
 //   - *OpenTofuInstaller: A pointer to the newly created OpenTofuInstaller.
 func NewOpenTofuInstaller(version string) *OpenTofuInstaller {
 	return &OpenTofuInstaller{
-		BaseInstaller: NewBaseInstaller(version, openTofuReleaseURL, "tofu", "zip", "/app/bin"),
+		BaseInstaller: NewBaseInstaller(version, openTofuReleaseURL, "tofu", "zip", "$HOME/bin"),
 	}
 }
 
