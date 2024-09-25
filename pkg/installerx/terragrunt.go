@@ -24,7 +24,7 @@ type TerragruntInstaller struct {
 //   - *TerragruntInstaller: A pointer to the newly created TerragruntInstaller.
 func NewTerragruntInstaller(version string) *TerragruntInstaller {
 	return &TerragruntInstaller{
-		BaseInstaller: NewBaseInstaller(version, terragruntReleaseURL, "terragrunt", ""),
+		BaseInstaller: NewBaseInstaller(version, terragruntReleaseURL, "terragrunt", "", "/app/bin"),
 	}
 }
 
