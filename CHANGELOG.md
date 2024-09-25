@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.26](https://github.com/Excoriate/daggerx/compare/v0.0.25...v0.0.26) (2024-09-25)
+
+
+### Features
+
+* Update binary installation directory to $HOME/bin ([#68](https://github.com/Excoriate/daggerx/issues/68)) ([81352e8](https://github.com/Excoriate/daggerx/commit/81352e8d14a230e46976ce8c08f273f179a99370))
+
 ## [0.0.25](https://github.com/Excoriate/daggerx/compare/v0.0.24...v0.0.25) (2024-09-25)
 
 
