@@ -1,55 +1,44 @@
 package installerx
 
 import (
+	"reflect"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
-func TestTerragruntInstaller_GetInstallCommands(t *testing.T) {
+func TestGetTerragruntInstallCommand(t *testing.T) {
 	tests := []struct {
-		name     string
-		version  string
-		expected [][]string
+		name       string
+		version    string
+		entryPoint string
+		want       []string
 	}{
 		{
-			name:    "Specific version",
-			version: "0.67.4",
-			expected: [][]string{
-				{"mkdir", "-p", "/usr/local/bin"},
-				{"curl", "-L", "-o", "/tmp/terragrunt.", "https://github.com/gruntwork-io/terragrunt/releases/download/v0.67.4/terragrunt_linux_amd64"},
-				{"mv", "/tmp/terragrunt.", "/usr/local/bin/terragrunt"},
-				{"chmod", "+x", "/usr/local/bin/terragrunt"},
-				{"terragrunt", "--version"},
-			},
+			name:       "Default entry point",
+			version:    "0.38.0",
+			entryPoint: "",
+			want: []string{"sh -c", `
+set -ex
+curl -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.38.0/terragrunt_linux_amd64 -o /usr/local/bin/terragrunt
+chmod +x /usr/local/bin/terragrunt
+`},
 		},
 		{
-			name:    "Version with 'v' prefix",
-			version: "v0.67.4",
-			expected: [][]string{
-				{"mkdir", "-p", "/usr/local/bin"},
-				{"curl", "-L", "-o", "/tmp/terragrunt.", "https://github.com/gruntwork-io/terragrunt/releases/download/v0.67.4/terragrunt_linux_amd64"},
-				{"mv", "/tmp/terragrunt.", "/usr/local/bin/terragrunt"},
-				{"chmod", "+x", "/usr/local/bin/terragrunt"},
-				{"terragrunt", "--version"},
-			},
+			name:       "Custom entry point",
+			version:    "0.39.0",
+			entryPoint: "bash -c",
+			want: []string{"bash -c", `
+set -ex
+curl -L https://github.com/gruntwork-io/terragrunt/releases/download/v0.39.0/terragrunt_linux_amd64 -o /usr/local/bin/terragrunt
+chmod +x /usr/local/bin/terragrunt
+`},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			installer := NewTerragruntInstaller(tt.version)
-			commands := installer.GetInstallCommands()
-			assert.Equal(t, tt.expected, commands)
+			if got := GetTerragruntInstallCommand(tt.version, tt.entryPoint); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetTerragruntInstallCommand() = %v, want %v", got, tt.want)
+			}
 		})
 	}
-}
-
-func TestTerragruntInstaller_GetLatestVersion(t *testing.T) {
-	installer := NewTerragruntInstaller("latest")
-	version, err := installer.GetLatestVersion()
-	require.NoError(t, err)
-	assert.NotEmpty(t, version)
-	assert.Equal(t, "0.67.4", version)
 }
