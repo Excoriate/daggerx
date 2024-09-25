@@ -15,40 +15,41 @@ type BaseInstaller struct {
 	releaseURL string
 	binaryName string
 	fileExt    string
+	installDir string
 }
 
 // NewBaseInstaller creates a new BaseInstaller instance.
-func NewBaseInstaller(version, releaseURL, binaryName, fileExt string) *BaseInstaller {
+func NewBaseInstaller(version, releaseURL, binaryName, fileExt, installDir string) *BaseInstaller {
+	if installDir == "" {
+		installDir = "/app/bin"
+	}
 	return &BaseInstaller{
 		version:    strings.TrimPrefix(version, "v"),
 		releaseURL: releaseURL,
 		binaryName: binaryName,
 		fileExt:    fileExt,
+		installDir: installDir,
 	}
 }
 
 // GetInstallCommands returns the commands to install the binary.
 func (bi *BaseInstaller) GetInstallCommands(url string) [][]string {
 	commands := [][]string{
-		{"mkdir", "-p", "/usr/local/bin"},
+		{"mkdir", "-p", bi.installDir},
 		{"curl", "-L", "-o", "/tmp/" + bi.binaryName + "." + bi.fileExt, url},
 	}
-
 	if bi.fileExt == "zip" {
-		commands = append(commands, []string{"unzip", "-d", "/usr/local/bin", "/tmp/" + bi.binaryName + "." + bi.fileExt})
+		commands = append(commands, []string{"unzip", "-d", bi.installDir, "/tmp/" + bi.binaryName + "." + bi.fileExt})
 	} else {
-		commands = append(commands, []string{"mv", "/tmp/" + bi.binaryName + "." + bi.fileExt, "/usr/local/bin/" + bi.binaryName})
+		commands = append(commands, []string{"mv", "/tmp/" + bi.binaryName + "." + bi.fileExt, bi.installDir + "/" + bi.binaryName})
 	}
-
 	commands = append(commands,
-		[]string{"chmod", "+x", "/usr/local/bin/" + bi.binaryName},
-		[]string{bi.binaryName, "--version"},
+		[]string{"chmod", "+x", bi.installDir + "/" + bi.binaryName},
+		[]string{bi.installDir + "/" + bi.binaryName, "--version"},
 	)
-
 	if bi.fileExt == "zip" {
 		commands = append(commands, []string{"rm", "/tmp/" + bi.binaryName + "." + bi.fileExt})
 	}
-
 	return commands
 }
 
@@ -57,7 +58,7 @@ func (bi *BaseInstaller) Install(container *dagger.Container, commands [][]strin
 	for _, cmd := range commands {
 		container = container.WithExec(cmd)
 	}
-	return container
+	return container.WithEnvVariable("PATH", bi.installDir+":$PATH")
 }
 
 // GetLatestVersion returns the latest version of the binary.
