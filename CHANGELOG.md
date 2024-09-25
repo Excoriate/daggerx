@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.23](https://github.com/Excoriate/daggerx/compare/v0.0.22...v0.0.23) (2024-09-24)
+
+
+### Features
+
+* Refactor apko build command construction ([#62](https://github.com/Excoriate/daggerx/issues/62)) ([92d3e69](https://github.com/Excoriate/daggerx/commit/92d3e69e44107a3fe339f1ed7c43e458ce7bdc73))
+
 ## [0.0.22](https://github.com/Excoriate/daggerx/compare/v0.0.21...v0.0.22) (2024-09-18)
 
 
