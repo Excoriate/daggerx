@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.25](https://github.com/Excoriate/daggerx/compare/v0.0.24...v0.0.25) (2024-09-25)
+
+
+### Features
+
+* Add configurable install directory to BaseInstaller ([#66](https://github.com/Excoriate/daggerx/issues/66)) ([3a905ae](https://github.com/Excoriate/daggerx/commit/3a905ae3d50543943751c5008bf56f4ed8ba6a3a))
+
 ## [0.0.24](https://github.com/Excoriate/daggerx/compare/v0.0.23...v0.0.24) (2024-09-25)
 
 
