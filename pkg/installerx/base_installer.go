@@ -2,7 +2,6 @@
 package installerx
 
 import (
-	"fmt"
 	"strings"
 
 	"dagger.io/dagger"
@@ -21,7 +20,7 @@ type BaseInstaller struct {
 // NewBaseInstaller creates a new BaseInstaller instance.
 func NewBaseInstaller(version, releaseURL, binaryName, fileExt, installDir string) *BaseInstaller {
 	if installDir == "" {
-		installDir = "/app/bin"
+		installDir = "$HOME/bin"
 	}
 	return &BaseInstaller{
 		version:    strings.TrimPrefix(version, "v"),
@@ -35,17 +34,17 @@ func NewBaseInstaller(version, releaseURL, binaryName, fileExt, installDir strin
 // GetInstallCommands returns the commands to install the binary.
 func (bi *BaseInstaller) GetInstallCommands(url string) [][]string {
 	commands := [][]string{
-		{"mkdir", "-p", bi.installDir},
+		{"mkdir", "-p", "$HOME/bin"},
 		{"curl", "-L", "-o", "/tmp/" + bi.binaryName + "." + bi.fileExt, url},
 	}
 	if bi.fileExt == "zip" {
-		commands = append(commands, []string{"unzip", "-d", bi.installDir, "/tmp/" + bi.binaryName + "." + bi.fileExt})
+		commands = append(commands, []string{"unzip", "-d", "$HOME/bin", "/tmp/" + bi.binaryName + "." + bi.fileExt})
 	} else {
-		commands = append(commands, []string{"mv", "/tmp/" + bi.binaryName + "." + bi.fileExt, bi.installDir + "/" + bi.binaryName})
+		commands = append(commands, []string{"mv", "/tmp/" + bi.binaryName + "." + bi.fileExt, "$HOME/bin/" + bi.binaryName})
 	}
 	commands = append(commands,
-		[]string{"chmod", "+x", bi.installDir + "/" + bi.binaryName},
-		[]string{bi.installDir + "/" + bi.binaryName, "--version"},
+		[]string{"chmod", "+x", "$HOME/bin/" + bi.binaryName},
+		[]string{"$HOME/bin/" + bi.binaryName, "--version"},
 	)
 	if bi.fileExt == "zip" {
 		commands = append(commands, []string{"rm", "/tmp/" + bi.binaryName + "." + bi.fileExt})
@@ -58,11 +57,5 @@ func (bi *BaseInstaller) Install(container *dagger.Container, commands [][]strin
 	for _, cmd := range commands {
 		container = container.WithExec(cmd)
 	}
-	return container.WithEnvVariable("PATH", bi.installDir+":$PATH")
-}
-
-// GetLatestVersion returns the latest version of the binary.
-func (bi *BaseInstaller) GetLatestVersion() (string, error) {
-	// Default implementation, should be overridden by specific installers
-	return "", fmt.Errorf("GetLatestVersion not implemented for BaseInstaller")
+	return container.WithEnvVariable("PATH", "$HOME/bin:$PATH")
 }

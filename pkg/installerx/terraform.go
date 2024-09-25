@@ -21,7 +21,7 @@ type TerraformInstaller struct {
 //   - *TerraformInstaller: A pointer to the newly created TerraformInstaller
 func NewTerraformInstaller(version string) *TerraformInstaller {
 	return &TerraformInstaller{
-		BaseInstaller: NewBaseInstaller(version, terraformReleaseURL, "terraform", "zip", "/app/bin"),
+		BaseInstaller: NewBaseInstaller(version, terraformReleaseURL, "terraform", "zip", "$HOME/bin"),
 	}
 }
 
