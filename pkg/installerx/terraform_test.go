@@ -7,15 +7,15 @@ import (
 
 func TestGetTerraformInstallCommand(t *testing.T) {
 	tests := []struct {
-		name       string
-		version    string
-		entryPoint string
-		want       []string
+		name   string
+		params TerraformInstallParams
+		want   []string
 	}{
 		{
-			name:       "Default entry point",
-			version:    "1.0.0",
-			entryPoint: "",
+			name: "Default parameters",
+			params: TerraformInstallParams{
+				Version: "1.0.0",
+			},
 			want: []string{"sh -c", `
 set -ex
 curl -L https://releases.hashicorp.com/terraform/1.0.0/terraform_1.0.0_linux_amd64.zip -o /tmp/terraform.zip
@@ -25,14 +25,17 @@ rm /tmp/terraform.zip
 `},
 		},
 		{
-			name:       "Custom entry point",
-			version:    "1.1.0",
-			entryPoint: "bash -c",
+			name: "Custom entry point and install directory",
+			params: TerraformInstallParams{
+				Version:    "1.1.0",
+				EntryPoint: "bash -c",
+				InstallDir: "/custom/bin",
+			},
 			want: []string{"bash -c", `
 set -ex
 curl -L https://releases.hashicorp.com/terraform/1.1.0/terraform_1.1.0_linux_amd64.zip -o /tmp/terraform.zip
-unzip /tmp/terraform.zip -d /usr/local/bin
-chmod +x /usr/local/bin/terraform
+unzip /tmp/terraform.zip -d /custom/bin
+chmod +x /custom/bin/terraform
 rm /tmp/terraform.zip
 `},
 		},
@@ -40,7 +43,7 @@ rm /tmp/terraform.zip
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := GetTerraformInstallCommand(tt.version, tt.entryPoint); !reflect.DeepEqual(got, tt.want) {
+			if got := GetTerraformInstallCommand(tt.params); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("GetTerraformInstallCommand() = %v, want %v", got, tt.want)
 			}
 		})
