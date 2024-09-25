@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.27](https://github.com/Excoriate/daggerx/compare/v0.0.26...v0.0.27) (2024-09-25)
+
+
+### Features
+
+* Add Terragrunt installer with customizable entry point ([#70](https://github.com/Excoriate/daggerx/issues/70)) ([f44ae50](https://github.com/Excoriate/daggerx/commit/f44ae501d397ac78128b988c9a187ddc7f55956e))
+
 ## [0.0.26](https://github.com/Excoriate/daggerx/compare/v0.0.25...v0.0.26) (2024-09-25)
 
 
