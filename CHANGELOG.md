@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.24](https://github.com/Excoriate/daggerx/compare/v0.0.23...v0.0.24) (2024-09-25)
+
+
+### Features
+
+* Add YAML validation utilities in the filex package ([#64](https://github.com/Excoriate/daggerx/issues/64)) ([c350965](https://github.com/Excoriate/daggerx/commit/c350965e13f9d407a89f251d1cc091b8f9a3a794))
+
 ## [0.0.23](https://github.com/Excoriate/daggerx/compare/v0.0.22...v0.0.23) (2024-09-24)
 
 
