@@ -20,6 +20,7 @@ require (
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/oauth2 v0.20.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -80,5 +81,4 @@ require (
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240515191416-fc5f0ca64291 // indirect
 	google.golang.org/grpc v1.64.0 // indirect
 	google.golang.org/protobuf v1.34.1 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
