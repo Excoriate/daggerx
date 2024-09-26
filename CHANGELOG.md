@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.29](https://github.com/Excoriate/daggerx/compare/v0.0.28...v0.0.29) (2024-09-26)
+
+
+### Features
+
+* Improve user experience with a new feature - Add a new button and update styles ([200327a](https://github.com/Excoriate/daggerx/commit/200327abc51aa3889f34e30cc1b0f3dc07cdf268))
+
+
+### Bug Fixes
+
+* Update Terraform and OpenTofu installation commands ([#74](https://github.com/Excoriate/daggerx/issues/74)) ([200327a](https://github.com/Excoriate/daggerx/commit/200327abc51aa3889f34e30cc1b0f3dc07cdf268))
+
 ## [0.0.28](https://github.com/Excoriate/daggerx/compare/v0.0.27...v0.0.28) (2024-09-25)
 
 
