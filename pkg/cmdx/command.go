@@ -1,4 +1,4 @@
-package cmdbuilder
+package cmdx
 
 import (
 	"errors"
