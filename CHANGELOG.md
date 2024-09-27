@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.0.30](https://github.com/Excoriate/daggerx/compare/v0.0.29...v0.0.30) (2024-09-27)
+
+
+### Features
+
+* Add function to generate AWS CLI installation command ([#76](https://github.com/Excoriate/daggerx/issues/76)) ([cf20790](https://github.com/Excoriate/daggerx/commit/cf207901cb6cc409a66140371d6cad8893c5d7e2))
+* Implement BuildCurlCommand function ([#77](https://github.com/Excoriate/daggerx/issues/77)) ([ccd26ef](https://github.com/Excoriate/daggerx/commit/ccd26ef5bbe7381aebbf25065a933cb00249db4b))
+* Improve handling of command arguments with spaces ([#78](https://github.com/Excoriate/daggerx/issues/78)) ([16767a4](https://github.com/Excoriate/daggerx/commit/16767a45639da42b7fc7c2e567c3c45ee4ef4dfc))
+
 ## [0.0.29](https://github.com/Excoriate/daggerx/compare/v0.0.28...v0.0.29) (2024-09-26)
 
 
