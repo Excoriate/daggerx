@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.31](https://github.com/Excoriate/daggerx/compare/v0.0.30...v0.0.31) (2024-09-30)
+
+
+### Features
+
+* Add validation for Apko keyring format ([#81](https://github.com/Excoriate/daggerx/issues/81)) ([2af407f](https://github.com/Excoriate/daggerx/commit/2af407f9508c0b140ffbc80b7350cc1b9fe8b355))
+* Improve documentation and readability of packages ([#82](https://github.com/Excoriate/daggerx/issues/82)) ([86f028a](https://github.com/Excoriate/daggerx/commit/86f028af621351067f2812becfd50bed133e3437))
+
+
+### Bug Fixes
+
+* Remove empty cmdbuilder package ([#80](https://github.com/Excoriate/daggerx/issues/80)) ([8e955d0](https://github.com/Excoriate/daggerx/commit/8e955d0ac4156c584abb8f70e55cb936e45a8a1a))
+
 ## [0.0.30](https://github.com/Excoriate/daggerx/compare/v0.0.29...v0.0.30) (2024-09-27)
 
 
