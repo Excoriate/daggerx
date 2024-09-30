@@ -1,3 +1,33 @@
+// Package cmdx provides utilities for generating and managing command-line
+// commands in a structured and efficient manner. This package is designed
+// to simplify the creation and handling of commands, ensuring that arguments
+// with spaces are properly managed and that the commands are constructed
+// correctly.
+//
+// The primary function in this package is GenerateCommand, which takes a main
+// command and a variadic slice of arguments, and returns a pointer to a
+// DaggerCMD slice. This slice includes the main command followed by the
+// provided arguments. The function also performs validation to ensure that
+// the main command is not empty.
+//
+// Example usage:
+//
+//	// Generate a Terraform plan command
+//	cmd, err := GenerateCommand("terraform", "plan", "-var", "foo=bar", "apply --auto-approve")
+//	if err != nil {
+//	    // handle error
+//	}
+//	// Use cmd, e.g., fmt.Println(*cmd) // Output: [terraform plan -var foo=bar apply --auto-approve]
+//
+//	// Generate a Go run command
+//	cmd, err = GenerateCommand("go", "run", "main.go", "--verbose")
+//	if err != nil {
+//	    // handle error
+//	}
+//	// Use cmd, e.g., fmt.Println(*cmd) // Output: [go run main.go --verbose]
+//
+// This package is intended for developers who need to programmatically
+// generate and manage command-line commands in their Go applications.
 package cmdx
 
 import (
