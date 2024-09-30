@@ -1,3 +1,35 @@
+// Package githubx provides utilities for interacting with GitHub's API,
+// specifically for fetching information about releases in a GitHub repository.
+//
+// This package includes functionality to authenticate with GitHub using an
+// OAuth2 token, and to retrieve the latest release information from a specified
+// repository. It leverages the go-github library to interact with GitHub's API.
+//
+// Example usage:
+//
+//	import (
+//	    "fmt"
+//	    "github.com/yourusername/yourrepo/pkg/githubx"
+//	)
+//
+//	func main() {
+//	    client := githubx.NewGHClient("your-github-token", "owner", "repo")
+//	    latestRelease, err := client.FetchLatestRelease()
+//	    if err != nil {
+//	        fmt.Println("Error fetching latest release:", err)
+//	        return
+//	    }
+//	    fmt.Println("Latest release:", latestRelease)
+//	}
+//
+// The above example demonstrates how to create a new GHClient instance and
+// fetch the latest release tag from a specified GitHub repository.
+//
+// Note: Ensure that you have a valid GitHub token with the necessary
+// permissions to access the repository's release information.
+//
+// For more details on GitHub's API, refer to the official documentation:
+// https://docs.github.com/en/rest/reference/repos#releases
 package githubx
 
 import (

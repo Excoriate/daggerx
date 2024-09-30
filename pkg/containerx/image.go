@@ -1,3 +1,36 @@
+// Package containerx provides utilities for managing container images and their versions.
+// It includes functions to set default image names and versions if they are not provided,
+// as well as options for constructing full image URLs with fallback values.
+//
+// The package is designed to simplify the process of working with container images by
+// providing sensible defaults and fallback mechanisms. This is particularly useful in
+// scenarios where image names or versions might be dynamically determined or not always
+// specified.
+//
+// The main functionalities provided by this package include:
+// - Setting default image names and versions if they are empty.
+// - Constructing full image URLs from provided options, with support for fallback values.
+//
+// Example usage:
+//
+//	import (
+//		"github.com/Excoriate/daggerx/pkg/containerx"
+//	)
+//
+//	func main() {
+//		opts := containerx.NewBaseContainerOpts{
+//			Image:         "my-image",
+//			Version:       "1.0.0",
+//			FallbackImage: "default-image",
+//			FallBackVersion: "latest",
+//		}
+//
+//		imageURL := containerx.GetImageURL(&opts)
+//		fmt.Println(imageURL) // Output: my-image:1.0.0
+//	}
+//
+// This package is part of the Excoriate DaggerX project and is intended to be used
+// as a utility for managing container images in a consistent and reliable manner.
 package containerx
 
 import (

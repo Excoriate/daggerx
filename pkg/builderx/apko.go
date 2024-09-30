@@ -1,3 +1,45 @@
+// Package builderx provides tools and utilities for building and managing APKO (Alpine Package Keeper for OCI) images.
+// APKO is a tool designed to create OCI (Open Container Initiative) images using Alpine Linux packages. This package
+// offers a high-level interface to configure, build, and manage these images efficiently.
+//
+// The builderx package includes support for various CPU architectures, configuration management, and keyring handling
+// for package verification. It is designed to be used in a variety of build environments and supports customization
+// through additional arguments and caching mechanisms.
+//
+// Key Features:
+// - Support for multiple CPU architectures (x86_64, aarch64, armv7, ppc64le, s390x).
+// - Configuration management for APKO builds.
+// - Keyring handling for package verification.
+// - Caching mechanisms to optimize build processes.
+// - High-level interface for building and managing APKO images.
+//
+// Example usage:
+//
+//	import (
+//	    "github.com/Excoriate/daggerx/pkg/builderx"
+//	)
+//
+//	func main() {
+//	    builder := builderx.ApkoBuilder{
+//	        configFile:   "path/to/config.yaml",
+//	        outputImage:  "myimage:latest",
+//	        outputTarball: "path/to/output.tar",
+//	        keyringPaths: []string{
+//	            builderx.ApkoWolfiSigninRsaKeyPath,
+//	            builderx.ApkoAlpineSigninRsaKeyPath,
+//	        },
+//	        cacheDir:  "/path/to/cache",
+//	        extraArgs: []string{"--some-flag"},
+//	    }
+//
+//	    // Use the builder to create an APKO image
+//	    err := builder.Build()
+//	    if err != nil {
+//	        fmt.Println("Error building APKO image:", err)
+//	    }
+//	}
+//
+// For more detailed information on how to use this package, refer to the documentation on Go.pkg.dev.
 package builderx
 
 import (

@@ -1,3 +1,28 @@
+// Package golangx provides utility functions for working with Go modules and
+// validating Go project structures. This package includes functions to check
+// if a given path is a Go module, ensuring that the necessary Go module files
+// are present in the specified directory.
+//
+// The primary function in this package is IsGoModule, which checks if a given
+// path contains a Go module by looking for the presence of a go.mod file.
+//
+// Example usage:
+//
+//	package main
+//
+//	import (
+//	    "fmt"
+//	    "path/to/golangx"
+//	)
+//
+//	func main() {
+//	    err := golangx.IsGoModule("path/to/go/module")
+//	    if err != nil {
+//	        fmt.Println(err)
+//	    } else {
+//	        fmt.Println("This is a valid Go module.")
+//	    }
+//	}
 package golangx
 
 import (

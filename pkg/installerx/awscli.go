@@ -1,3 +1,38 @@
+// Package installerx provides utilities for installing various software packages
+// in a streamlined and automated manner. This package is particularly useful for
+// setting up development environments, CI/CD pipelines, and other automated workflows
+// that require the installation of specific software components.
+//
+// The installerx package includes functions to generate shell commands for downloading
+// and installing software packages, ensuring compatibility with different system
+// architectures and handling any necessary conversions or adjustments.
+//
+// One of the key features of this package is the ability to generate installation
+// commands for the AWS CLI, a powerful tool for managing AWS services from the command
+// line. The package supports different system architectures, including "x86_64" and
+// "aarch64" (which is converted to "arm64" for compatibility).
+//
+// Example usage:
+//
+//	package main
+//
+//	import (
+//		"fmt"
+//		"installerx"
+//	)
+//
+//	func main() {
+//		// Generate the installation command for the AWS CLI for the default architecture (x86_64)
+//		command := installerx.GetAwsCliInstallCommand("")
+//		fmt.Println(command)
+//
+//		// Generate the installation command for the AWS CLI for the "aarch64" architecture
+//		command = installerx.GetAwsCliInstallCommand("aarch64")
+//		fmt.Println(command)
+//	}
+//
+// This package is designed to be easy to use and integrate into existing Go projects,
+// providing a simple and efficient way to automate software installations.
 package installerx
 
 import (

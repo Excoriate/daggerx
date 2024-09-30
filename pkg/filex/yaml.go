@@ -1,3 +1,20 @@
+// Package filex provides utility functions for working with files and directories,
+// including validation of file extensions, existence, content, and structure.
+// It offers functions to check if a file has a valid YAML extension, if it exists,
+// if it has content, and if it can be properly unmarshaled into a provided struct.
+//
+// The package includes the following main functions:
+//
+//  1. ValidateYAMLExtension(filename string) bool:
+//     Checks if the given file has a .yaml or .yml extension.
+//  2. ValidateYAMLExists(filename string) bool:
+//     Checks if the given YAML file exists.
+//  3. ValidateYAMLHasContent(filename string) (bool, error):
+//     Checks if the given YAML file is not empty and returns a boolean indicating
+//     whether the file has content and an error if any occurred during reading the file.
+//  4. ValidateYAMLStructure(filename string, out interface{}) error:
+//     Checks if the given YAML file can be properly unmarshaled into the provided struct.
+//  5. ValidateYAML(filename string, out interface{}) error:
 package filex
 
 import (

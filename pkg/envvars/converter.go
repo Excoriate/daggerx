@@ -1,3 +1,41 @@
+// Package envvars provides utilities for converting environment variables
+// between different formats. This package is designed to facilitate the
+// handling of environment variables in Go applications, ensuring that they
+// can be easily converted from strings, maps, and other common data structures
+// into a standardized format.
+//
+// The primary focus of this package is to provide functions that convert
+// environment variables into slices of DaggerEnvVars, a custom type defined
+// in the types package. These functions ensure that the environment variables
+// are valid and handle edge cases such as empty strings or maps gracefully.
+//
+// Key Functions:
+//
+//   - ToDaggerEnvVarsFromStr: Converts a comma-separated string of key=value pairs
+//     into a slice of DaggerEnvVars.
+//
+//   - ToDaggerEnvVarsFromMap: Converts a map of environment variables into a slice
+//     of DaggerEnvVars.
+//
+// Example Usage:
+//
+// Converting a comma-separated string of environment variables:
+//
+//	envVarsStr := "FOO=bar,BAZ=qux"
+//	envVars, err := ToDaggerEnvVarsFromStr(envVarsStr)
+//	if err != nil {
+//	    // handle error
+//	}
+//	// Use envVars, e.g., fmt.Println(envVars)
+//
+// Converting a map of environment variables:
+//
+//	envVarsMap := map[string]string{"FOO": "bar", "BAZ": "qux"}
+//	envVarsSlice, err := ToDaggerEnvVarsFromMap(envVarsMap)
+//	if err != nil {
+//	    // handle error
+//	}
+//	// Use envVarsSlice, e.g., fmt.Println(envVarsSlice)
 package envvars
 
 import (
