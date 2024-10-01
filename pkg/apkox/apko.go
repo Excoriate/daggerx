@@ -1,4 +1,4 @@
-// Package builderx provides tools and utilities for building and managing APKO (Alpine Package Keeper for OCI) images.
+// Package apkox provides tools and utilities for building and managing APKO (Alpine Package Keeper for OCI) images.
 // APKO is a tool designed to create OCI (Open Container Initiative) images using Alpine Linux packages. This package
 // offers a high-level interface to configure, build, and manage these images efficiently.
 //
@@ -40,7 +40,7 @@
 //	}
 //
 // For more detailed information on how to use this package, refer to the documentation on Go.pkg.dev.
-package builderx
+package apkox
 
 import (
 	"fmt"
