@@ -41,3 +41,6 @@
 aider*
 .aider**
 AI/*.md
+.cursorrules
+.direnv
+.devenv
