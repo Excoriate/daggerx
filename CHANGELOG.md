@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.33](https://github.com/Excoriate/daggerx/compare/v0.0.32...v0.0.33) (2024-11-03)
+
+
+### Features
+
+* Add GitHub asset installation functionality ([#87](https://github.com/Excoriate/daggerx/issues/87)) ([ca7b278](https://github.com/Excoriate/daggerx/commit/ca7b2787ff72fa5129c804e3c358f317f8c99e5c))
+
 ## [0.0.32](https://github.com/Excoriate/daggerx/compare/v0.0.31...v0.0.32) (2024-10-01)
 
 
