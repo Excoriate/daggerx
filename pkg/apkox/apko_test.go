@@ -2,6 +2,7 @@ package apkox
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -213,6 +214,7 @@ func TestApkoBuilder(t *testing.T) {
 		builder := NewApkoBuilder().
 			WithConfigFile("config.yaml").
 			WithOutputImage("my-image:latest").
+			WithOutputTarball("output.tar").
 			WithCacheDir("/tmp/cache").
 			WithKeyring("/custom/keyring.pub").
 			WithWolfiKeyring().
@@ -244,7 +246,7 @@ func TestApkoBuilder(t *testing.T) {
 		}
 
 		expected := []string{
-			"apko", "build", "config.yaml", "my-image:latest",
+			"apko", "build", "config.yaml", "my-image:latest", "output.tar",
 			"--cache-dir", "/tmp/cache",
 			"--keyring-append", "/custom/keyring.pub",
 			"--keyring-append", "/etc/apk/keys/wolfi-signing.rsa.pub",
@@ -291,6 +293,60 @@ func TestApkoBuilder(t *testing.T) {
 		_, err := builder.BuildCommand()
 		if err == nil || err.Error() != "output image name is required" {
 			t.Errorf("Expected error for missing output image, got: %v", err)
+		}
+	})
+
+	t.Run("WithTag", func(t *testing.T) {
+		builder := NewApkoBuilder().WithTag("v1.0.0")
+		if builder.tag != "v1.0.0" {
+			t.Errorf("Tag not set correctly, got %s", builder.tag)
+		}
+	})
+
+	t.Run("BuildCommand", func(t *testing.T) {
+		builder := NewApkoBuilder().
+			WithConfigFile("config.yaml").
+			WithOutputImage("my-image").
+			WithTag("v1.0.0").
+			WithOutputTarball("output.tar").
+			WithCacheDir("/cache/dir").
+			WithKeyring("/path/to/keyring.pub").
+			WithArchitecture("aarch64").
+			WithSBOM(false).
+			WithVCS(false)
+
+		cmd, err := builder.BuildCommand()
+		if err != nil {
+			t.Fatalf("Unexpected error: %v", err)
+		}
+
+		expected := []string{
+			"apko", "build", "config.yaml", "my-image:v1.0.0", "output.tar",
+			"--cache-dir", "/cache/dir",
+			"--keyring-append", "/path/to/keyring.pub",
+			"--arch", "aarch64",
+			"--sbom=false",
+			"--vcs=false",
+		}
+
+		if !reflect.DeepEqual(cmd, expected) {
+			t.Errorf("Command mismatch.\nExpected: %v\nGot: %v", expected, cmd)
+		}
+	})
+
+	t.Run("BuildCommand_DefaultTag", func(t *testing.T) {
+		builder := NewApkoBuilder().
+			WithConfigFile("config.yaml").
+			WithOutputImage("my-image").
+			WithOutputTarball("output.tar")
+
+		cmd, err := builder.BuildCommand()
+		if err != nil {
+			t.Fatalf("BuildCommand returned unexpected error: %v", err)
+		}
+
+		if !strings.Contains(cmd[3], "my-image:latest") {
+			t.Errorf("Default tag not applied correctly. Got %s, want my-image:latest", cmd[3])
 		}
 	})
 }
@@ -451,7 +507,9 @@ func TestGetApkoConfigOrPreset(t *testing.T) {
 func TestApkoBuilderCommand(t *testing.T) {
 	builder := NewApkoBuilder().
 		WithConfigFile("config.yaml").
-		WithOutputImage("my-image:latest").
+		WithOutputImage("my-image").
+		WithTag("v1.0.0").
+		WithOutputTarball("output.tar").
 		WithCacheDir("/cache/dir").
 		WithKeyring("/path/to/keyring.pub").
 		WithArchitecture("aarch64").
@@ -464,7 +522,7 @@ func TestApkoBuilderCommand(t *testing.T) {
 	}
 
 	expected := []string{
-		"apko", "build", "config.yaml", "my-image:latest",
+		"apko", "build", "config.yaml", "my-image:v1.0.0", "output.tar",
 		"--cache-dir", "/cache/dir",
 		"--keyring-append", "/path/to/keyring.pub",
 		"--arch", "aarch64",
