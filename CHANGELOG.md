@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.34](https://github.com/Excoriate/daggerx/compare/v0.0.33...v0.0.34) (2024-11-04)
+
+
+### Features
+
+* Improve apko builder options - Remove `WithOutputTarball` and update `WithArchitecture` usage ([#89](https://github.com/Excoriate/daggerx/issues/89)) ([7614b60](https://github.com/Excoriate/daggerx/commit/7614b60811863aed0a34956242a1e973e2b59c6a))
+
 ## [0.0.33](https://github.com/Excoriate/daggerx/compare/v0.0.32...v0.0.33) (2024-11-03)
 
 
