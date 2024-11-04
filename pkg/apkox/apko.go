@@ -81,6 +81,9 @@ type ApkoBuilder struct {
 	// outputImage is the name of the output OCI image.
 	outputImage string
 
+	// tag is the tag of the output OCI image.
+	tag string
+
 	// outputTarball is the path where the output tarball will be saved.
 	outputTarball string
 
@@ -263,12 +266,8 @@ func (b *ApkoBuilder) WithTimestamp(timestamp string) *ApkoBuilder {
 // WithTag adds a tag to the APKO build.
 // If no tag is provided, it defaults to "latest".
 // It returns the updated ApkoBuilder instance.
-func (b *ApkoBuilder) WithTag(tag ...string) *ApkoBuilder {
-	if len(tag) > 0 {
-		b.tags = append(b.tags, tag[0])
-	} else {
-		b.tags = append(b.tags, "latest")
-	}
+func (b *ApkoBuilder) WithTag(tag string) *ApkoBuilder {
+	b.tag = tag
 	return b
 }
 
@@ -357,8 +356,25 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 		return nil, fmt.Errorf("output image name is required")
 	}
 
-	// Start with the base command and the three required arguments
-	cmd := []string{"apko", "build", b.configFile, b.outputImage}
+	// Default output tarball if not set
+	if b.outputTarball == "" {
+		b.outputTarball = "image.tar"
+	}
+
+	// Default tag if not set
+	if b.tag == "" {
+		b.tag = "latest"
+	}
+
+	// Format the image reference with tag
+	imageRef := b.outputImage
+	if !strings.Contains(b.outputImage, ":") {
+		imageRef = fmt.Sprintf("%s:%s", b.outputImage, b.tag)
+	}
+
+	// Start with the base command and the three required arguments in correct order:
+	// apko build <config> <image-tag> <output-path>
+	cmd := []string{"apko", "build", b.configFile, imageRef, b.outputTarball}
 
 	// Add optional arguments
 	if b.cacheDir != "" {
