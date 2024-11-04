@@ -358,7 +358,7 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 	}
 
 	// Start with the base command and the three required arguments
-	cmd := []string{"apko", "build", b.configFile, b.outputImage, "image.tar"}
+	cmd := []string{"apko", "build", b.configFile, b.outputImage}
 
 	// Add optional arguments
 	if b.cacheDir != "" {

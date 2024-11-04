@@ -213,37 +213,38 @@ func TestApkoBuilder(t *testing.T) {
 		builder := NewApkoBuilder().
 			WithConfigFile("config.yaml").
 			WithOutputImage("my-image:latest").
-			WithOutputTarball("image.tar").
+			WithCacheDir("/tmp/cache").
 			WithKeyring("/custom/keyring.pub").
 			WithWolfiKeyring().
 			WithAlpineKeyring().
-			WithCacheDir("/tmp/cache").
-			WithExtraArg("--custom-arg").
-			WithBuildArch("amd64").
+			WithArchitecture("amd64").
 			WithBuildContext("/build/context").
 			WithDebug().
 			WithKeyringAppendPlaintext("/plaintext.key").
 			WithNoNetwork().
 			WithRepositoryAppend("https://example.com/repo").
 			WithTimestamp("2023-01-01T00:00:00Z").
+			WithSBOM(false).
+			WithVCS(false).
 			WithAnnotations(map[string]string{"key": "value"}).
 			WithBuildDate("2023-01-01T00:00:00Z").
 			WithLockfile("/path/to/lockfile.json").
 			WithOffline().
 			WithPackageAppend("pkg1", "pkg2").
-			WithSBOM(false).
 			WithSBOMFormats("spdx", "cyclonedx").
 			WithSBOMPath("/path/to/sbom").
-			WithVCS(false).
 			WithLogLevel("debug").
 			WithLogPolicy("builtin:stderr", "/tmp/log/foo").
-			WithWorkdir("/path/to/workdir")
+			WithWorkdir("/path/to/workdir").
+			WithExtraArg("--custom-arg")
+
+		cmd, err := builder.BuildCommand()
+		if err != nil {
+			t.Fatalf("BuildCommand returned unexpected error: %v", err)
+		}
 
 		expected := []string{
-			"apko", "build",
-			"config.yaml",
-			"my-image:latest",
-			"image.tar",
+			"apko", "build", "config.yaml", "my-image:latest",
 			"--cache-dir", "/tmp/cache",
 			"--keyring-append", "/custom/keyring.pub",
 			"--keyring-append", "/etc/apk/keys/wolfi-signing.rsa.pub",
@@ -270,11 +271,6 @@ func TestApkoBuilder(t *testing.T) {
 			"--log-policy", "/tmp/log/foo",
 			"--workdir", "/path/to/workdir",
 			"--custom-arg",
-		}
-
-		cmd, err := builder.BuildCommand()
-		if err != nil {
-			t.Fatalf("BuildCommand returned an error: %v", err)
 		}
 
 		if !reflect.DeepEqual(cmd, expected) {
@@ -454,13 +450,11 @@ func TestGetApkoConfigOrPreset(t *testing.T) {
 
 func TestApkoBuilderCommand(t *testing.T) {
 	builder := NewApkoBuilder().
-		WithBuildArch(ArchX8664).
-		WithBuildArch(ArchAarch64).
-		WithKeyring("/path/to/keyring.pub").
 		WithConfigFile("config.yaml").
 		WithOutputImage("my-image:latest").
-		WithOutputTarball("image.tar"). // Changed this to "image.tar"
 		WithCacheDir("/cache/dir").
+		WithKeyring("/path/to/keyring.pub").
+		WithArchitecture("aarch64").
 		WithSBOM(false).
 		WithVCS(false)
 
@@ -469,19 +463,16 @@ func TestApkoBuilderCommand(t *testing.T) {
 		t.Fatalf("Unexpected error: %v", err)
 	}
 
-	expectedCmd := []string{
-		"apko", "build",
-		"config.yaml",
-		"my-image:latest",
-		"image.tar", // Changed this to "image.tar"
+	expected := []string{
+		"apko", "build", "config.yaml", "my-image:latest",
 		"--cache-dir", "/cache/dir",
 		"--keyring-append", "/path/to/keyring.pub",
-		"--arch", "aarch64", // Last arch specified takes precedence
+		"--arch", "aarch64",
 		"--sbom=false",
 		"--vcs=false",
 	}
 
-	if !reflect.DeepEqual(cmd, expectedCmd) {
-		t.Errorf("Command mismatch.\nExpected: %v\nGot: %v", expectedCmd, cmd)
+	if !reflect.DeepEqual(cmd, expected) {
+		t.Errorf("Command mismatch.\nExpected: %v\nGot: %v", expected, cmd)
 	}
 }
