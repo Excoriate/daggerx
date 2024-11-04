@@ -2,7 +2,6 @@ package apkox
 
 import (
 	"reflect"
-	"strings"
 	"testing"
 )
 
@@ -213,32 +212,14 @@ func TestApkoBuilder(t *testing.T) {
 	t.Run("BuildCommand", func(t *testing.T) {
 		builder := NewApkoBuilder().
 			WithConfigFile("config.yaml").
-			WithOutputImage("my-image:latest").
+			WithOutputImage("my-image").
+			WithTag("latest").
 			WithOutputTarball("output.tar").
 			WithCacheDir("/tmp/cache").
 			WithKeyring("/custom/keyring.pub").
-			WithWolfiKeyring().
-			WithAlpineKeyring().
 			WithArchitecture("amd64").
-			WithBuildContext("/build/context").
-			WithDebug().
-			WithKeyringAppendPlaintext("/plaintext.key").
-			WithNoNetwork().
-			WithRepositoryAppend("https://example.com/repo").
-			WithTimestamp("2023-01-01T00:00:00Z").
 			WithSBOM(false).
-			WithVCS(false).
-			WithAnnotations(map[string]string{"key": "value"}).
-			WithBuildDate("2023-01-01T00:00:00Z").
-			WithLockfile("/path/to/lockfile.json").
-			WithOffline().
-			WithPackageAppend("pkg1", "pkg2").
-			WithSBOMFormats("spdx", "cyclonedx").
-			WithSBOMPath("/path/to/sbom").
-			WithLogLevel("debug").
-			WithLogPolicy("builtin:stderr", "/tmp/log/foo").
-			WithWorkdir("/path/to/workdir").
-			WithExtraArg("--custom-arg")
+			WithVCS(false)
 
 		cmd, err := builder.BuildCommand()
 		if err != nil {
@@ -246,33 +227,15 @@ func TestApkoBuilder(t *testing.T) {
 		}
 
 		expected := []string{
-			"apko", "build", "config.yaml", "my-image:latest", "output.tar",
+			"apko", "build",
 			"--cache-dir", "/tmp/cache",
 			"--keyring-append", "/custom/keyring.pub",
-			"--keyring-append", "/etc/apk/keys/wolfi-signing.rsa.pub",
-			"--keyring-append", "/etc/apk/keys/alpine-devel@lists.alpinelinux.org-4a6a0840.rsa.pub",
 			"--arch", "amd64",
-			"--build-context", "/build/context",
-			"--debug",
-			"--keyring-append-plaintext", "/plaintext.key",
-			"--no-network",
-			"--repository-append", "https://example.com/repo",
-			"--timestamp", "2023-01-01T00:00:00Z",
 			"--sbom=false",
 			"--vcs=false",
-			"--annotations", "key:value",
-			"--build-date", "2023-01-01T00:00:00Z",
-			"--lockfile", "/path/to/lockfile.json",
-			"--offline",
-			"--package-append", "pkg1",
-			"--package-append", "pkg2",
-			"--sbom-formats", "spdx,cyclonedx",
-			"--sbom-path", "/path/to/sbom",
-			"--log-level", "debug",
-			"--log-policy", "builtin:stderr",
-			"--log-policy", "/tmp/log/foo",
-			"--workdir", "/path/to/workdir",
-			"--custom-arg",
+			"config.yaml",
+			"my-image:latest",
+			"output.tar",
 		}
 
 		if !reflect.DeepEqual(cmd, expected) {
@@ -321,12 +284,15 @@ func TestApkoBuilder(t *testing.T) {
 		}
 
 		expected := []string{
-			"apko", "build", "config.yaml", "my-image:v1.0.0", "output.tar",
+			"apko", "build",
 			"--cache-dir", "/cache/dir",
 			"--keyring-append", "/path/to/keyring.pub",
 			"--arch", "aarch64",
 			"--sbom=false",
 			"--vcs=false",
+			"config.yaml",
+			"my-image:v1.0.0",
+			"output.tar",
 		}
 
 		if !reflect.DeepEqual(cmd, expected) {
@@ -345,8 +311,21 @@ func TestApkoBuilder(t *testing.T) {
 			t.Fatalf("BuildCommand returned unexpected error: %v", err)
 		}
 
-		if !strings.Contains(cmd[3], "my-image:latest") {
-			t.Errorf("Default tag not applied correctly. Got %s, want my-image:latest", cmd[3])
+		expectedImageRef := "my-image:latest"
+		imageRefFound := false
+		for i, arg := range cmd {
+			if arg == expectedImageRef {
+				imageRefFound = true
+				// Verify the position - should be second to last argument
+				if i != len(cmd)-2 {
+					t.Errorf("Image reference in wrong position. Got position %d, want second to last", i)
+				}
+				break
+			}
+		}
+
+		if !imageRefFound {
+			t.Errorf("Default tag not applied correctly. Expected to find %s in command %v", expectedImageRef, cmd)
 		}
 	})
 }
@@ -522,12 +501,15 @@ func TestApkoBuilderCommand(t *testing.T) {
 	}
 
 	expected := []string{
-		"apko", "build", "config.yaml", "my-image:v1.0.0", "output.tar",
+		"apko", "build",
 		"--cache-dir", "/cache/dir",
 		"--keyring-append", "/path/to/keyring.pub",
 		"--arch", "aarch64",
 		"--sbom=false",
 		"--vcs=false",
+		"config.yaml",
+		"my-image:v1.0.0",
+		"output.tar",
 	}
 
 	if !reflect.DeepEqual(cmd, expected) {

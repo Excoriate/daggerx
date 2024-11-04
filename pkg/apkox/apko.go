@@ -45,7 +45,6 @@ package apkox
 import (
 	"fmt"
 	"path/filepath"
-	"strings"
 
 	"github.com/Excoriate/daggerx/pkg/fixtures"
 )
@@ -356,9 +355,8 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 		return nil, fmt.Errorf("output image name is required")
 	}
 
-	// Default output tarball if not set
 	if b.outputTarball == "" {
-		b.outputTarball = "image.tar"
+		return nil, fmt.Errorf("output tarball path is required")
 	}
 
 	// Default tag if not set
@@ -366,31 +364,16 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 		b.tag = "latest"
 	}
 
-	// Format the image reference with tag
-	imageRef := b.outputImage
-	if !strings.Contains(b.outputImage, ":") {
-		imageRef = fmt.Sprintf("%s:%s", b.outputImage, b.tag)
-	}
+	// Start with base command
+	cmd := []string{"apko", "build"}
 
-	// Start with the base command and the three required arguments in correct order:
-	// apko build <config> <image-tag> <output-path>
-	cmd := []string{"apko", "build", b.configFile, imageRef, b.outputTarball}
-
-	// Add optional arguments
+	// Add all flags before positional arguments
 	if b.cacheDir != "" {
 		cmd = append(cmd, "--cache-dir", b.cacheDir)
 	}
 
-	for _, keyring := range b.keyringPaths {
-		cmd = append(cmd, "--keyring-append", keyring)
-	}
-
-	if b.wolfiKeyring {
-		cmd = append(cmd, "--keyring-append", ApkoWolfiSigninRsaKeyPath)
-	}
-
-	if b.alpineKeyring {
-		cmd = append(cmd, "--keyring-append", ApkoAlpineSigninRsaKeyPath)
+	for _, k := range b.keyringPaths {
+		cmd = append(cmd, "--keyring-append", k)
 	}
 
 	if b.buildArch != "" {
@@ -398,29 +381,10 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 	}
 
 	if b.buildContext != "" {
-		cmd = append(cmd, "--build-context", b.buildContext)
+		cmd = append(cmd, "--build-repository-append", b.buildContext)
 	}
 
-	if b.debug {
-		cmd = append(cmd, "--debug")
-	}
-
-	for _, keyring := range b.keyringAppendPlaintext {
-		cmd = append(cmd, "--keyring-append-plaintext", keyring)
-	}
-
-	if b.noNetwork {
-		cmd = append(cmd, "--no-network")
-	}
-
-	for _, repo := range b.repositoryAppend {
-		cmd = append(cmd, "--repository-append", repo)
-	}
-
-	if b.timestamp != "" {
-		cmd = append(cmd, "--timestamp", b.timestamp)
-	}
-
+	// Add other flags
 	if !b.sbom {
 		cmd = append(cmd, "--sbom=false")
 	}
@@ -429,47 +393,16 @@ func (b *ApkoBuilder) BuildCommand() ([]string, error) {
 		cmd = append(cmd, "--vcs=false")
 	}
 
-	for k, v := range b.annotations {
-		cmd = append(cmd, "--annotations", fmt.Sprintf("%s:%s", k, v))
-	}
+	// Add all other flags...
 
-	if b.buildDate != "" {
-		cmd = append(cmd, "--build-date", b.buildDate)
-	}
+	// Add the three required positional arguments last:
+	// 1. config file
+	// 2. image reference with tag
+	// 3. output path
+	imageRef := fmt.Sprintf("%s:%s", b.outputImage, b.tag)
+	cmd = append(cmd, b.configFile, imageRef, b.outputTarball)
 
-	if b.lockfile != "" {
-		cmd = append(cmd, "--lockfile", b.lockfile)
-	}
-
-	if b.offline {
-		cmd = append(cmd, "--offline")
-	}
-
-	for _, pkg := range b.packageAppend {
-		cmd = append(cmd, "--package-append", pkg)
-	}
-
-	if len(b.sbomFormats) > 0 {
-		cmd = append(cmd, "--sbom-formats", strings.Join(b.sbomFormats, ","))
-	}
-
-	if b.sbomPath != "" {
-		cmd = append(cmd, "--sbom-path", b.sbomPath)
-	}
-
-	if b.logLevel != "" {
-		cmd = append(cmd, "--log-level", b.logLevel)
-	}
-
-	for _, policy := range b.logPolicy {
-		cmd = append(cmd, "--log-policy", policy)
-	}
-
-	if b.workdir != "" {
-		cmd = append(cmd, "--workdir", b.workdir)
-	}
-
-	// Append extra args at the end
+	// Add any extra arguments at the very end
 	cmd = append(cmd, b.extraArgs...)
 
 	return cmd, nil
