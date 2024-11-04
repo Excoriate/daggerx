@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.36](https://github.com/Excoriate/daggerx/compare/v0.0.35...v0.0.36) (2024-11-04)
+
+
+### Features
+
+* Improve ApkoBuilder command structure ([#93](https://github.com/Excoriate/daggerx/issues/93)) ([49d0ba4](https://github.com/Excoriate/daggerx/commit/49d0ba4856518787e43f3025417f06dcf237615e))
+
 ## [0.0.35](https://github.com/Excoriate/daggerx/compare/v0.0.34...v0.0.35) (2024-11-04)
 
 
