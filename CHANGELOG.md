@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.35](https://github.com/Excoriate/daggerx/compare/v0.0.34...v0.0.35) (2024-11-04)
+
+
+### Features
+
+* Improve ApkoBuilder's handling of tags and output tarball ([#91](https://github.com/Excoriate/daggerx/issues/91)) ([1419a2d](https://github.com/Excoriate/daggerx/commit/1419a2d9dc00bd0edf240576d0d0f05b8f2a5eb0))
+
 ## [0.0.34](https://github.com/Excoriate/daggerx/compare/v0.0.33...v0.0.34) (2024-11-04)
 
 
