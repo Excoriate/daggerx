@@ -16,7 +16,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.54.3
 	github.com/aws/aws-sdk-go-v2/service/sns v1.29.8
 	github.com/aws/aws-sdk-go-v2/service/sqs v1.32.3
-	github.com/containerd/containerd v1.7.17
+	github.com/containerd/containerd v1.7.27
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/oauth2 v0.20.0
@@ -26,7 +26,7 @@ require (
 require (
 	github.com/99designs/gqlgen v0.17.49 // indirect
 	github.com/Khan/genqlient v0.7.0 // indirect
-	github.com/Microsoft/hcsshim v0.11.5 // indirect
+	github.com/Microsoft/hcsshim v0.11.7 // indirect
 	github.com/adrg/xdg v0.4.0 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.2 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.16 // indirect
@@ -46,8 +46,9 @@ require (
 	github.com/aws/smithy-go v1.20.3 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/containerd/log v0.1.0 // indirect
+	github.com/containerd/platforms v0.2.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/go-logr/logr v1.4.1 // indirect
+	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -73,12 +74,12 @@ require (
 	go.opentelemetry.io/otel/trace v1.27.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.3.1 // indirect
 	golang.org/x/exp v0.0.0-20231110203233-9a3e6036ecaa // indirect
-	golang.org/x/net v0.26.0 // indirect
-	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
+	golang.org/x/net v0.33.0 // indirect
+	golang.org/x/sync v0.10.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240520151616-dc85e6b867a5 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240515191416-fc5f0ca64291 // indirect
 	google.golang.org/grpc v1.64.0 // indirect
-	google.golang.org/protobuf v1.34.1 // indirect
+	google.golang.org/protobuf v1.35.2 // indirect
 )
