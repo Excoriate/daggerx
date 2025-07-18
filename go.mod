@@ -21,7 +21,7 @@ require (
 	github.com/containerd/containerd v1.7.17
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/oauth2 v0.25.0
+	golang.org/x/oauth2 v0.27.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
